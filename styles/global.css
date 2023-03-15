@@ -1,0 +1,37 @@
+:root {
+  --border-color: #291D4D;
+  --dialog-background: #FFF3B4;
+
+  --menu-background: #dad7cc;
+  --menu-border-color: #6b6a64;
+  --menu-font-color: #080308;
+  --menu-selected-background: #79b7db;
+}
+
+* {
+  box-sizing:border-box;
+}
+
+body {
+  background: #333;
+  padding: 0;
+  margin: 0;
+  overflow: hidden; /* prevent scrolling */
+}
+  
+
+.game-container {
+  position: relative; 
+  width: 400px;
+  height: 240px;
+  margin: 0 auto;
+  outline: 1px solid #fff;
+
+  /* transform map upward, can scale to whatever you need */
+  transform: scale(4) translateY(50%);
+}
+
+/* super cool and important css style */
+.game-container canvas {
+  image-rendering: pixelated;
+}

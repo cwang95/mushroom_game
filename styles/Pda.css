@@ -1,0 +1,46 @@
+.Pda {
+    font-family: "Hellovetica";
+    position: absolute;
+    padding: 8px;
+    margin: 2px;
+    left:2px;
+    top:10px;
+    background: var(--menu-background);
+    border-top: 1px solid var(--menu-border-color);
+    color: var(--menu-font-color);
+    image-rendering: pixelated;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: center;
+}
+
+.Pda_title {
+    margin: 0;
+    font-size: 6px;
+    padding: 0;
+    background: none;
+    border: 0;
+    font-family: inherit;
+}
+
+.Pda_button {
+    margin: 2px;
+    font-size: 4px;
+    padding: 3px 2px 2px 2px;
+    background: none;
+    border: 0;
+    font-family: inherit;
+}
+.Pda_button:hover {
+    background: lavender;
+}
+
+.Pda_clock {
+    font-family: "Helvetica";
+    font-size: 6px;
+}
+.Pda_inbox {
+    font-family: "Helvetica";
+    font-size: 6px;
+}

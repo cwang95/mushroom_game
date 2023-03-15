@@ -1,0 +1,13 @@
+.Map {    
+    font-family: "Hellovetica";
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    width: 240px;
+    height: 160px;
+    padding: 4px;
+    background: var(--menu-background);
+    color: var(--menu-font-color);
+    display: none;
+}
