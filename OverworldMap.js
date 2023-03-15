@@ -225,7 +225,7 @@ class OverworldMap {
 window.OverworldMaps = {
     Bedroom: {
         lowerSrc: "./images/maps/BedroomLower.png",
-        upperSrc: "./images/maps/bedroom_3_upper.png",
+        upperSrc: "./images/maps/bedroom_3_upper.PNG",
         configObjects: {
             hero: {
                 type: "Person",
