@@ -224,8 +224,8 @@ class OverworldMap {
 
 window.OverworldMaps = {
     Bedroom: {
-        lowerSrc: "/images/maps/BedroomLower.png",
-        upperSrc: "/images/maps/bedroom_3_upper.png",
+        lowerSrc: "./images/maps/BedroomLower.png",
+        upperSrc: "./images/maps/bedroom_3_upper.png",
         configObjects: {
             hero: {
                 type: "Person",
@@ -318,8 +318,8 @@ window.OverworldMaps = {
         }
     },
     DemoRoom: {
-        lowerSrc: "/images/maps/DemoLower.png",
-        upperSrc: "/images/maps/DemoUpper.png",
+        lowerSrc: "./images/maps/DemoLower.png",
+        upperSrc: "./images/maps/DemoUpper.png",
         withCameraPerson: true,
         configObjects: {
             hero: {
@@ -332,7 +332,7 @@ window.OverworldMaps = {
                 type: "Person",
                 x: utils.withGrid(8),
                 y: utils.withGrid(5),
-                src: "/images/characters/people/npc2.png",
+                src: "./images/characters/people/npc2.png",
                 // behaviorLoop: [
                 //     { type: "walk", direction: "left"},
                 //     { type: "stand", direction: "up", time: 800 },
@@ -345,7 +345,7 @@ window.OverworldMaps = {
                 type: "Person",
                 x: utils.withGrid(2),
                 y: utils.withGrid(7),
-                src: "/images/characters/people/amethyst.png",
+                src: "./images/characters/people/amethyst.png",
                 behaviorLoop: [
                     { type: "stand", direction: "left", time: 200 },
                     { type: "stand", direction: "up", time: 200 },
@@ -391,9 +391,9 @@ window.OverworldMaps = {
         }
     },
     Outside: {
-        lowerSrc: "/images/maps/OutsideWorldTopLeft.png",
-        // lowerSrc: "/images/maps/LivingRoom.png",
-        upperSrc: "/images/maps/OutsideUpper.png",
+        lowerSrc: "./images/maps/OutsideWorldTopLeft.png",
+        // lowerSrc: "./images/maps/LivingRoom.png",
+        upperSrc: "./images/maps/OutsideUpper.png",
         withCameraPerson: true,
         configObjects: {
             hero: {
@@ -577,9 +577,9 @@ window.OverworldMaps = {
 
     },
     Outside01: {
-        lowerSrc: "/images/maps/OutsideWorld01.png",
-        // lowerSrc: "/images/maps/LivingRoom.png",
-        upperSrc: "/images/maps/OutsideWorld01_Upper.png",
+        lowerSrc: "./images/maps/OutsideWorld01.png",
+        // lowerSrc: "./images/maps/LivingRoom.png",
+        upperSrc: "./images/maps/OutsideWorld01_Upper.png",
         withCameraPerson: true,
         configObjects: {
             hero: {
@@ -809,9 +809,9 @@ window.OverworldMaps = {
         },
     },
     Outside02: {
-        lowerSrc: "/images/maps/Outside02.png",
-        // lowerSrc: "/images/maps/LivingRoom.png",
-        upperSrc: "/images/maps/OutsideWorld01_Upper.png",
+        lowerSrc: "./images/maps/Outside02.png",
+        // lowerSrc: "./images/maps/LivingRoom.png",
+        upperSrc: "./images/maps/OutsideWorld01_Upper.png",
         withCameraPerson: true,
         configObjects: {
             hero: {
@@ -826,9 +826,9 @@ window.OverworldMaps = {
         cutsceneSpaces: {},
     },
     Kitchen: {
-        lowerSrc: "/images/maps/OutsideWorldTopLeft.png",
-        // lowerSrc: "/images/maps/LivingRoom.png",
-        upperSrc: "/images/maps/OutsideUpper.png",
+        lowerSrc: "./images/maps/OutsideWorldTopLeft.png",
+        // lowerSrc: "./images/maps/LivingRoom.png",
+        upperSrc: "./images/maps/OutsideUpper.png",
         // Use object for walls for quick lookup
         walls: {
             // "16,16": true,
@@ -858,7 +858,7 @@ window.OverworldMaps = {
                 type: "Person",
                 x: utils.withGrid(10),
                 y: utils.withGrid(8),
-                src: "/images/characters/people/amethyst.png",
+                src: "./images/characters/people/amethyst.png",
                 talking: [
                     {
                     events: [
@@ -871,7 +871,7 @@ window.OverworldMaps = {
                 type: "Person",
                 x: utils.withGrid(7),
                 y: utils.withGrid(6),
-                src: "/images/characters/people/pixie.png",
+                src: "./images/characters/people/pixie.png",
                 talking: [
                     {
                     events: [

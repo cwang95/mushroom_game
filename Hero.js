@@ -14,7 +14,7 @@ class Hero {
         this.maxSpeed = 1;
         this.sprite = new Sprite({
             gameObject: overworld,
-            src: "/images/characters/people/hero.png",
+            src: "./images/characters/people/hero.png",
         })
 
     }
