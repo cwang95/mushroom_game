@@ -28,7 +28,7 @@ body {
   outline: 1px solid #fff;
 
   /* transform map upward, can scale to whatever you need */
-  transform: scale(4) translateY(50%);
+  transform: scale(2) translateY(50%);
 }
 
 /* super cool and important css style */
