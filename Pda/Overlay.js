@@ -9,13 +9,11 @@ class Overlay {
     }
 
     showMap() {
-        console.log("Show map!")
         this.map.show();
         this.inbox.hide();
     }
 
     showInbox() {
-        console.log("Show inbox!")
         this.inbox.show();
         this.map.hide();
     }
@@ -32,6 +30,10 @@ class Overlay {
     hide() {
         this.isActive = false;
         this.element.style.display = "none";
+    }
+
+    update() {
+        this.inbox.update();
     }
 
     createElement() {

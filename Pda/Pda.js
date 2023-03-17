@@ -1,21 +1,22 @@
 class Pda {
-    constructor() {
+    constructor(progress) {
         this.openMap = false;
         this.openInbox = false;
         this.openChat = false;
-
         this.hasNewMessages = false;
+        this.progress = progress;
+
     }
 
     update() {
         const { clockState, playerState } = window;
-        const clockElement = this.pdaElement.querySelector(".Pda_clock");
-        clockElement.innerText = clockState.getTime();
-        const inboxElement = this.pdaElement.querySelector(".Pda_inbox");
-  
-        console.log(inboxElement)
-        // const inbox = [...playerState.inbox];
-        inboxElement.innerText = `${playerState.inbox.length}`;
+        // const clockElement = this.pdaElement.querySelector(".Pda_clock");
+        // clockElement.innerText = clockState.getTime();
+        // const inboxElement = this.pdaElement.querySelector(".Pda_inbox");
+        // inboxElement.innerText = `${playerState.inbox.length}`;
+        console.log("PDA update")
+
+        this.overlayElement.update();
     }
 
     createElement() {
@@ -23,27 +24,29 @@ class Pda {
         this.pdaElement.classList.add("Pda");
         this.pdaElement.innerHTML = (`
           <p class="Pda_title">PDA</p>
-          <button class="Pda_button" data-button="showMap">Map</button>
-          <button class="Pda_button" data-button="showInbox">Inbox</button>
-          <p class="Pda_clock">${clockState.getTime()}</p>
-          <p class="Pda_inbox"></p>
+          <button class="Pda_button Overlay_button" data-button="showMap">Map</button>
+          <button class="Pda_button Overlay_button" data-button="showInbox">Inbox</button>
+          <button class="Pda_button Pda_save_button" data-button="saveGame">Save</button>
         `);
 
-        this.pdaElement.querySelectorAll("button").forEach(button => {
+        this.pdaElement.querySelectorAll(".Overlay_button").forEach(button => {
           button.addEventListener("click", () => {
-            // const chosenOption = this.options[ Number(button.dataset.button) ];
             const chosen = button.dataset.button;
             this.overlayElement.show(chosen);
           })
         })
 
-        const updateHandler = e => {
-            this.update();
-        }
+        this.pdaElement.querySelector(".Pda_save_button").addEventListener("click", () => {
+          console.log('saving');
+          this.progress.save();
+        });
 
-        // Attach the complete handler to PersonWalkingComplete dispatch event
-        document.addEventListener("TimePassed", updateHandler);
-        document.addEventListener("NewInboxItem", updateHandler);
+
+        // const updateHandler = e => {
+        //     this.update();
+        // }
+        // // document.addEventListener("TimePassed", updateHandler);
+        // document.addEventListener("NewInboxItem", updateHandler);
     }
 
 
@@ -53,8 +56,5 @@ class Pda {
         this.overlayElement = new Overlay();
         this.overlayElement.init(container);
         container.appendChild(this.pdaElement);
-        // container.appendChild(this.mapOverlay);
-        // container.appendChild(this.chatOverlay);
-        // this.update();
     }
 }
