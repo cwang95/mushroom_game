@@ -48,6 +48,16 @@ class Inbox {
         this.element.innerHTML = (`
             <h1 class="Inbox_title">Inbox</h1>
         `);
+        const { playerState } = window;
+        playerState.inbox.forEach((message) => {
+        //   const pizza = playerState.pizzas[key];
+            // const {text, from, time} = message;
+            const msg = new InboxMessage(message);
+            msg.createElement();
+            this.messages.push(msg);
+            this.element.appendChild(msg.element);
+        })
+
         const updateHandler = e => {
             this.update(e);
         }

@@ -38,7 +38,7 @@ class TextMessage {
     }
 
     done() {
-        if (this.revealingText.isDone) {
+        if (this.revealingText.isDone || this.isChat) {
             this.actionListener.unbind();
             this.element.remove();
             this.onComplete();
