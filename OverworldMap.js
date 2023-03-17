@@ -125,10 +125,6 @@ class OverworldMap {
         }
     }
 
-    mountHero() {
-
-    }
-
     mountObjects() {
         Object.keys(this.configObjects).forEach(key => {
             let object = this.configObjects[key];
@@ -199,7 +195,10 @@ class OverworldMap {
 
     checkForFootstepCutscene() {
         const hero = this.gameObjects["hero"];
-        const match = this.cutsceneSpaces[`${hero.x},${hero.y}`]
+        // needs some rounding?
+        const roundX = hero.x%16===0 ? hero.x : Math.round(hero.x / 16) * 16;
+        const roundY = hero.y%16===0 ? hero.y : Math.round(hero.y / 16) * 16;
+        const match = this.cutsceneSpaces[`${roundX},${roundY}`]
         if (!this.isCutscenePlaying && match) {
             this.startCutscene(match[0].events);
         }
@@ -312,6 +311,12 @@ window.OverworldMaps = {
                 isPlayerControlled: true,
                 x: utils.withGrid(1),
                 y: utils.withGrid(2)
+            },
+            Chantrella: {
+                type: "Person",
+                x: utils.withGrid(9),
+                y: utils.withGrid(6),
+                src: "./images/characters/people/Chantrella.png"
             }
         },
         gameObjects: {
@@ -791,7 +796,6 @@ window.OverworldMaps = {
                     ]
                 }
             ],
-            //[utils.asGridCoord(21, 15)
             [utils.asGridCoord(22, 0)]: [
                 {
                     events: [
@@ -808,16 +812,19 @@ window.OverworldMaps = {
                     ]
                 }
             ],
-            // [utils.asGridCoord(32,12)]: true,
-            // [utils.asGridCoord(32,13)]: true,
-            // [utils.asGridCoord(32,14)]: true,
+            // Exit to town square
             [utils.asGridCoord(31,12)]: [
                 {
                     events: [
-                        { who: "hero", type: "walk", direction: "up" },
+                        { who: "hero", type: "walk", direction: "right" },
                         { 
                             type: "changeMap", 
-                            map: "TownSquare",
+                            map: "TownSquare", 
+                            heroConfig: {
+                                x: utils.withGrid(2), 
+                                y: utils.withGrid(8),
+                                direction: "right"
+                            }
                         },
                     ]
                 }
@@ -826,7 +833,15 @@ window.OverworldMaps = {
                 {
                     events: [
                         { who: "hero", type: "walk", direction: "right" },
-                        { type: "changeMap", map: "TownSquare"},
+                        { 
+                            type: "changeMap", 
+                            map: "TownSquare", 
+                            heroConfig: {
+                                x: utils.withGrid(2), 
+                                y: utils.withGrid(8),
+                                direction: "right"
+                            }
+                        },
                     ]
                 }
             ],
@@ -834,10 +849,19 @@ window.OverworldMaps = {
                 {
                     events: [
                         { who: "hero", type: "walk", direction: "right" },
-                        { type: "changeMap", map: "TownSquare"},
+                        { 
+                            type: "changeMap", 
+                            map: "TownSquare", 
+                            heroConfig: {
+                                x: utils.withGrid(2), 
+                                y: utils.withGrid(8),
+                                direction: "right"
+                            }
+                        },
                     ]
                 }
             ],
+            // Exit to toadstool
             [utils.asGridCoord(20,16)]: [
                 {
                     events: [
@@ -1076,6 +1100,14 @@ window.OverworldMaps = {
                 isPlayerControlled: true,
                 x: utils.withGrid(8),
                 y: utils.withGrid(8)
+            },
+            oysterGuy: {
+                type: "Person",
+                height: 50,
+                width: 50,
+                src: "./images/characters/people/OysterGuy.png",// TODO: Add shadow to PNG 
+                x: utils.withGrid(10),
+                y: utils.withGrid(3)
             }
         },
         walls: {
@@ -1207,45 +1239,85 @@ window.OverworldMaps = {
             [utils.asGridCoord(7, 3)]: true,
             [utils.asGridCoord(8, 3)]: true,
             [utils.asGridCoord(9, 3)]: true,
+            [utils.asGridCoord(10, 3)]: true,
+            [utils.asGridCoord(11, 3)]: true,
             [utils.asGridCoord(6, 4)]: true,
             [utils.asGridCoord(7, 4)]: true,
             [utils.asGridCoord(8, 4)]: true,
             [utils.asGridCoord(9, 4)]: true,
+            [utils.asGridCoord(10, 4)]: true,
+            [utils.asGridCoord(11, 4)]: true,
 
 
         },
         cutsceneSpaces: {
 
+            // [utils.asGridCoord(-1, 6)]: true,
+            // [utils.asGridCoord(-1, 7)]: true,
+            // [utils.asGridCoord(-1, 8)]: true,
+            // [utils.asGridCoord(-1, 9)]: true,
             // Up to outside01
-            [utils.asGridCoord(12,3)]: [
+            [utils.asGridCoord(1,6)]: [
                 {
                     events: [
-                        { who: "hero", type: "walk", direction: "up" },
-                        { type: "changeMap", map: "Outside01", heroX: utils.withGrid(21), heroY: utils.withGrid(13)},
+                        { who: "hero", type: "walk", direction: "left" },
+                        { 
+                            type: "changeMap", 
+                            map: "Outside01", 
+                            heroConfig: {
+                                x: utils.withGrid(30), 
+                                y: utils.withGrid(13),
+                                direction: "left"
+                            }
+                        },
                     ]
                 }
             ],
-            [utils.asGridCoord(13,3)]: [
+            [utils.asGridCoord(1,7)]: [
                 {
                     events: [
-                        { who: "hero", type: "walk", direction: "up" },
-                        { type: "changeMap", map: "Outside01", heroX: utils.withGrid(21), heroY: utils.withGrid(13)},
+                        { who: "hero", type: "walk", direction: "left" },
+                        { 
+                            type: "changeMap", 
+                            map: "Outside01", 
+                            heroConfig: {
+                                x: utils.withGrid(30), 
+                                y: utils.withGrid(13),
+                                direction: "left"
+                            }
+                        },
                     ]
                 }
             ],
-            [utils.asGridCoord(14,3)]: [
+            [utils.asGridCoord(1,8)]: [
                 {
                     events: [
-                        { who: "hero", type: "walk", direction: "up" },
-                        { type: "changeMap", map: "Outside01", heroX: utils.withGrid(21), heroY: utils.withGrid(13)},
+                        { who: "hero", type: "walk", direction: "left" },
+                        { 
+                            type: "changeMap", 
+                            map: "Outside01", 
+                            heroConfig: {
+                                x: utils.withGrid(30), 
+                                y: utils.withGrid(13),
+                                direction: "left"
+                            }
+                        },
                     ]
                 }
             ],
-            [utils.asGridCoord(15,3)]: [
+            [utils.asGridCoord(1,9)]: [
                 {
                     events: [
-                        { who: "hero", type: "walk", direction: "up" },
-                        { type: "changeMap", map: "Outside01", heroX: utils.withGrid(21), heroY: utils.withGrid(13)},
+                        { who: "hero", type: "walk", direction: "left" },
+                        { 
+                            type: "changeMap", 
+                            map: "Outside01", 
+                            heroConfig: {
+                                x: utils.withGrid(30), 
+                                y: utils.withGrid(13),
+                                direction: "left"
+                            }
+                        },
                     ]
                 }
             ],

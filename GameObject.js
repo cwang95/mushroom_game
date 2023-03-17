@@ -8,6 +8,8 @@ class GameObject {
         this.sprite = new Sprite({
             gameObject: this,
             src: config.src || "./images/characters/people/hero.png",
+            height: config.height,
+            width: config.width
         })
 
         // Grab behavior loop from config or set to nothing

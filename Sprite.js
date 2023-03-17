@@ -36,6 +36,9 @@ class Sprite {
 
 
         this.gameObject = config.gameObject;
+
+        this.height = config.height || 32;
+        this.width = config.width || 32;
     }
 
     get frame() {
@@ -77,14 +80,14 @@ class Sprite {
         this.isShadowLoaded && ctx.drawImage(this.shadow, x,y)
         this.isLoaded && ctx.drawImage(
             this.image, 
-            spriteFrameX * 32, //left cut 
-            spriteFrameY * 32, //top cut,
-            32, //width of cut
-            32, //height of cut
+            spriteFrameX * this.height, //left cut 
+            spriteFrameY * this.width, //top cut,
+            this.height, //width of cut
+            this.width, //height of cut
             x, // Canvas X
             y, // Canvas Y
-            32,
-            32
+            this.height,
+            this.width
          )
         this.updateAnimationProgress();
     }

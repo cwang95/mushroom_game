@@ -17,6 +17,9 @@ class Progress {
             playerState: {
                 storyFlags: playerState.storyFlags,
                 inbox: playerState.inbox
+            },
+            clockState: {
+                time: clockState.time
             }
         }))
     }
@@ -35,6 +38,9 @@ class Progress {
             this.startingHeroDirection = file.startingHeroDirection;
             Object.keys(file.playerState).forEach(key=> {
                 playerState[key] = file.playerState[key];
+            });
+            Object.keys(file.clockState).forEach(key=> {
+                clockState[key] = file.clockState[key];
             });
         }
     }

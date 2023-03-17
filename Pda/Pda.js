@@ -37,16 +37,8 @@ class Pda {
         })
 
         this.pdaElement.querySelector(".Pda_save_button").addEventListener("click", () => {
-          console.log('saving');
           this.progress.save();
         });
-
-
-        // const updateHandler = e => {
-        //     this.update();
-        // }
-        // // document.addEventListener("TimePassed", updateHandler);
-        // document.addEventListener("NewInboxItem", updateHandler);
     }
 
 

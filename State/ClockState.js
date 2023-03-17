@@ -8,6 +8,22 @@ class ClockState {
             3: "12:30",
             4: "12:40",
             5: "12:50",
+            6: "1:00",
+            7: "1:10",
+            8: "1:20",
+            9: "1:30",
+            10: "1:40",
+            11: "1:50",
+            12: "2:00",
+            13: "2:10",
+            14: "2:20",
+            15: "2:30",
+            16: "2:40",
+            17: "2:50",
+            18: "3:00",
+            19: "3:10",
+            20: "3:20",
+            21: "3:30",
         }
     }
 
@@ -22,12 +38,18 @@ class ClockState {
 window.clockState = new ClockState();
 
 window.timedEvents = {
-    2: {
+    1: {
         events:[
             { 
                 type: "chatMessage", 
                 text: "Come to Toadstool now! Hurry!!!", 
-                from: "Amethyst", 
+                from: "Morel", 
+                acknowledged: false
+            },
+            { 
+                type: "chatMessage", 
+                text: "Don't tell Chantrella I'm here...", 
+                from: "Morel", 
                 acknowledged: false
             }
         ]
