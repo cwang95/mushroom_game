@@ -191,10 +191,8 @@ class OverworldMap {
     checkForTimedCutscene() {
         const { clockState, timedEvents } = window;
         const match = timedEvents[clockState.time];
-        console.log("Checking for timed cutscene");
         
         if (match) {
-            console.log("Message found!")
             this.startCutscene(match.events);
         }
     }
@@ -206,26 +204,13 @@ class OverworldMap {
             this.startCutscene(match[0].events);
         }
     }
-
-    // addWall(x, y) {
-    //     this.walls[`${x},${y}`] = true;
-    // }
-
-    // removeWall(x, y) {
-    //     delete this.walls[`${x},${y}`];
-    // }
-
-    // moveWall(wasX, wasY, direction) {
-    //     this.removeWall(wasX,wasY);
-    //     const {x,y} = utils.nextPosition(wasX, wasY, direction);
-    //     this.addWall(x,y);
-    // }
 }
 
 window.OverworldMaps = {
     Bedroom: {
+        id: "Bedroom",
         lowerSrc: "./images/maps/BedroomLower.png",
-        upperSrc: "./images/maps/bedroom_3_upper.PNG",
+        upperSrc: "./images/maps/BedroomUpper.png",
         configObjects: {
             hero: {
                 type: "Person",
@@ -318,6 +303,7 @@ window.OverworldMaps = {
         }
     },
     LivingRoom: {
+        id: "LivingRoom",
         lowerSrc: "./images/maps/LivingRoomLower.png",
         upperSrc: "./images/maps/LivingRoomUpper.png",
         configObjects: {
@@ -407,81 +393,9 @@ window.OverworldMaps = {
         }
 
     },
-    DemoRoom: {
-        lowerSrc: "./images/maps/DemoLower.png",
-        upperSrc: "./images/maps/DemoUpper.png",
-        withCameraPerson: true,
-        configObjects: {
-            hero: {
-                type: "Person",
-                isPlayerControlled: true,
-                x: utils.withGrid(5),
-                y: utils.withGrid(8)
-            },
-            npcB:{
-                type: "Person",
-                x: utils.withGrid(8),
-                y: utils.withGrid(5),
-                src: "./images/characters/people/npc2.png",
-                // behaviorLoop: [
-                //     { type: "walk", direction: "left"},
-                //     { type: "stand", direction: "up", time: 800 },
-                //     { type: "walk", direction: "up"},
-                //     { type: "walk", direction: "right"},
-                //     { type: "walk", direction: "down"},
-                // ]
-            },
-            npcC: {
-                type: "Person",
-                x: utils.withGrid(2),
-                y: utils.withGrid(7),
-                src: "./images/characters/people/amethyst.png",
-                behaviorLoop: [
-                    { type: "stand", direction: "left", time: 200 },
-                    { type: "stand", direction: "up", time: 200 },
-                    { type: "stand", direction: "right", time: 200 },
-                    { type: "stand", direction: "down", time: 200 },
-                ],
-            }
-        },
-        gameObjects: {
-
-        },
-        // Use object for walls for quick lookup
-        walls: {
-            // "16,16": true,
-            // Brackets are for dynamic keys, inside [] will eval to str
-            [utils.asGridCoord(7,6)]: true,
-            [utils.asGridCoord(8,6)]: true,
-            [utils.asGridCoord(7,7)]: true,
-            [utils.asGridCoord(8,7)]: true,
-        },
-        cutsceneSpaces: {
-            [utils.asGridCoord(7,4)]: [
-                {
-                    events: [
-                        { who: "npcB", type: "walk", direction: "left" },
-                        { who: "npcB", type: "stand", direction: "up", time: 100 },
-                        { type: "textMessage", text: "Don't go there"},
-                        { who: "npcB", type: "walk", direction: "right" },
-                        { who: "npcB", type: "stand", direction: "down", time: 5 },
-                        { who: "hero", type: "walk", direction: "down" },
-                        { who: "hero", type: "walk", direction: "left" }
-                    ]
-                }
-            ],
-            [utils.asGridCoord(5,10)]: [
-                {
-                    events: [
-                        { who: "hero", type: "walk", direction: "down" },
-                        { type: "changeMap", map: "Outside" },
-                    ]
-                }
-            ]
-        }
-    },
     Outside: {
-        lowerSrc: "./images/maps/OutsideWorldTopLeft.png",
+        id: "Outside",
+        lowerSrc: "./images/maps/OutsideLower.png",
         // lowerSrc: "./images/maps/LivingRoom.png",
         upperSrc: "./images/maps/OutsideUpper.png",
         withCameraPerson: true,
@@ -667,9 +581,10 @@ window.OverworldMaps = {
 
     },
     Outside01: {
-        lowerSrc: "./images/maps/OutsideWorld01.png",
+        id: "Outside01",
+        lowerSrc: "./images/maps/Outside01Lower.png",
         // lowerSrc: "./images/maps/LivingRoom.png",
-        upperSrc: "./images/maps/OutsideWorld01_Upper.png",
+        upperSrc: "./images/maps/Outside01Upper.png",
         withCameraPerson: true,
         configObjects: {
             hero: {
@@ -848,7 +763,15 @@ window.OverworldMaps = {
                 {
                     events: [
                         { who: "hero", type: "walk", direction: "up" },
-                        { type: "changeMap", map: "Outside", heroX: utils.withGrid(20), heroY: utils.withGrid(14)},
+                        { 
+                            type: "changeMap", 
+                            map: "Outside", 
+                            heroConfig: {
+                                x: utils.withGrid(20), 
+                                y: utils.withGrid(14), 
+                                direction: "up"
+                            }
+                        },
                     ]
                 }
             ],
@@ -856,7 +779,15 @@ window.OverworldMaps = {
                 {
                     events: [
                         { who: "hero", type: "walk", direction: "up" },
-                        { type: "changeMap", map: "Outside", heroX: utils.withGrid(20), heroY: utils.withGrid(14)},
+                        { 
+                            type: "changeMap", 
+                            map: "Outside", 
+                            heroConfig: {
+                                x: utils.withGrid(20), 
+                                y: utils.withGrid(14), 
+                                direction: "up"
+                            }
+                        },
                     ]
                 }
             ],
@@ -865,7 +796,15 @@ window.OverworldMaps = {
                 {
                     events: [
                         { who: "hero", type: "walk", direction: "up" },
-                        { type: "changeMap", map: "Outside", heroX: utils.withGrid(20), heroY: utils.withGrid(14)},
+                        { 
+                            type: "changeMap", 
+                            map: "Outside", 
+                            heroConfig: {
+                                x: utils.withGrid(20), 
+                                y: utils.withGrid(14), 
+                                direction: "up"
+                            }
+                        },
                     ]
                 }
             ],
@@ -875,8 +814,11 @@ window.OverworldMaps = {
             [utils.asGridCoord(31,12)]: [
                 {
                     events: [
-                        { who: "hero", type: "walk", direction: "right" },
-                        { type: "changeMap", map: "TownSquare"},
+                        { who: "hero", type: "walk", direction: "up" },
+                        { 
+                            type: "changeMap", 
+                            map: "TownSquare",
+                        },
                     ]
                 }
             ],
@@ -922,24 +864,8 @@ window.OverworldMaps = {
             ],
         },
     },
-    Outside02: {
-        lowerSrc: "./images/maps/Outside02.png",
-        // lowerSrc: "./images/maps/LivingRoom.png",
-        upperSrc: "./images/maps/OutsideWorld01_Upper.png",
-        withCameraPerson: true,
-        configObjects: {
-            hero: {
-                type: "Person",
-                isPlayerControlled: true,
-                x: utils.withGrid(20),
-                y: utils.withGrid(1)
-            }
-        },
-        walls: {
-        },
-        cutsceneSpaces: {},
-    },
     Toadstool: {
+        id: "Toadstool",
         lowerSrc: "./images/maps/ToadstoolLower.png",
         // lowerSrc: "./images/maps/LivingRoom.png",
         upperSrc: "./images/maps/ToadstoolUpper.png",
@@ -1077,7 +1003,15 @@ window.OverworldMaps = {
                 {
                     events: [
                         { who: "hero", type: "walk", direction: "up" },
-                        { type: "changeMap", map: "Outside01", heroX: utils.withGrid(21), heroY: utils.withGrid(13)},
+                        { 
+                            type: "changeMap", 
+                            map: "Outside01", 
+                            heroConfig: {
+                                x: utils.withGrid(21), 
+                                y: utils.withGrid(13), 
+                                direction: "up"
+                            }
+                        },
                     ]
                 }
             ],
@@ -1085,7 +1019,15 @@ window.OverworldMaps = {
                 {
                     events: [
                         { who: "hero", type: "walk", direction: "up" },
-                        { type: "changeMap", map: "Outside01", heroX: utils.withGrid(21), heroY: utils.withGrid(13)},
+                        { 
+                            type: "changeMap", 
+                            map: "Outside01", 
+                            heroConfig: {
+                                x: utils.withGrid(21), 
+                                y: utils.withGrid(13), 
+                                direction: "up"
+                            }
+                        },
                     ]
                 }
             ],
@@ -1093,7 +1035,15 @@ window.OverworldMaps = {
                 {
                     events: [
                         { who: "hero", type: "walk", direction: "up" },
-                        { type: "changeMap", map: "Outside01", heroX: utils.withGrid(21), heroY: utils.withGrid(13)},
+                        { 
+                            type: "changeMap", 
+                            map: "Outside01", 
+                            heroConfig: {
+                                x: utils.withGrid(21), 
+                                y: utils.withGrid(13), 
+                                direction: "up"
+                            }
+                        },
                     ]
                 }
             ],
@@ -1101,16 +1051,24 @@ window.OverworldMaps = {
                 {
                     events: [
                         { who: "hero", type: "walk", direction: "up" },
-                        { type: "changeMap", map: "Outside01", heroX: utils.withGrid(21), heroY: utils.withGrid(13)},
+                        { 
+                            type: "changeMap", 
+                            map: "Outside01", 
+                            heroConfig: {
+                                x: utils.withGrid(21), 
+                                y: utils.withGrid(13), 
+                                direction: "up"
+                            }
+                        },
                     ]
                 }
             ],
         },
     },
     TownSquare: {
+        id: "TownSquare",
         lowerSrc: "./images/maps/TownSquareLower2.png",
-        // lowerSrc: "./images/maps/LivingRoom.png",
-        upperSrc: "./images/maps/TownSquareUpper.png",
+        upperSrc: "./images/maps/TownSquareUpper2.png",
         withCameraPerson: true,
         configObjects: {
             hero: {
@@ -1189,6 +1147,72 @@ window.OverworldMaps = {
             [utils.asGridCoord(30,15)]: true,
             [utils.asGridCoord(31,15)]: true,
 
+            // Flower planters left
+            [utils.asGridCoord(-1, 0)]: true,
+            [utils.asGridCoord(-1, 1)]: true,
+            [utils.asGridCoord(-1, 2)]: true,
+            [utils.asGridCoord(-1, 3)]: true,
+            [utils.asGridCoord(-1, 4)]: true,
+            [utils.asGridCoord(-1, 5)]: true,
+            // [utils.asGridCoord(-1, 6)]: true,
+            // [utils.asGridCoord(-1, 7)]: true,
+            // [utils.asGridCoord(-1, 8)]: true,
+            // [utils.asGridCoord(-1, 9)]: true,
+            [utils.asGridCoord(-1, 10)]: true,
+            [utils.asGridCoord(-1, 11)]: true,
+            [utils.asGridCoord(-1, 12)]: true,
+            [utils.asGridCoord(-1, 13)]: true,
+            [utils.asGridCoord(-1, 14)]: true,
+            [utils.asGridCoord(-1, 15)]: true,
+
+
+            // Flower planters right
+            [utils.asGridCoord(31, 0)]: true,
+            [utils.asGridCoord(31, 1)]: true,
+            [utils.asGridCoord(31, 2)]: true,
+            [utils.asGridCoord(31, 3)]: true,
+            [utils.asGridCoord(31, 4)]: true,
+            [utils.asGridCoord(31, 5)]: true,
+            // [utils.asGridCoord(31, 6)]: true,
+            // [utils.asGridCoord(31, 7)]: true,
+            // [utils.asGridCoord(31, 8)]: true,
+            // [utils.asGridCoord(31, 9)]: true,
+            [utils.asGridCoord(31, 10)]: true,
+            [utils.asGridCoord(31, 11)]: true,
+            [utils.asGridCoord(31, 12)]: true,
+            [utils.asGridCoord(31, 13)]: true,
+            [utils.asGridCoord(31, 14)]: true,
+            [utils.asGridCoord(31, 15)]: true,
+
+            // Fountain
+            [utils.asGridCoord(14, 6)]: true,
+            [utils.asGridCoord(15, 6)]: true,
+            [utils.asGridCoord(16, 6)]: true,
+            [utils.asGridCoord(17, 6)]: true,
+            [utils.asGridCoord(14, 7)]: true,
+            [utils.asGridCoord(15, 7)]: true,
+            [utils.asGridCoord(16, 7)]: true,
+            [utils.asGridCoord(17, 7)]: true,
+            [utils.asGridCoord(14, 8)]: true,
+            [utils.asGridCoord(15, 8)]: true,
+            [utils.asGridCoord(16, 8)]: true,
+            [utils.asGridCoord(17, 8)]: true,
+            [utils.asGridCoord(14, 9)]: true,
+            [utils.asGridCoord(15, 9)]: true,
+            [utils.asGridCoord(16, 9)]: true,
+            [utils.asGridCoord(17, 9)]: true,
+
+            // Flower stall
+            [utils.asGridCoord(6, 3)]: true,
+            [utils.asGridCoord(7, 3)]: true,
+            [utils.asGridCoord(8, 3)]: true,
+            [utils.asGridCoord(9, 3)]: true,
+            [utils.asGridCoord(6, 4)]: true,
+            [utils.asGridCoord(7, 4)]: true,
+            [utils.asGridCoord(8, 4)]: true,
+            [utils.asGridCoord(9, 4)]: true,
+
+
         },
         cutsceneSpaces: {
 
@@ -1227,75 +1251,4 @@ window.OverworldMaps = {
             ],
         },
     },
-    Kitchen: {
-        lowerSrc: "./images/maps/OutsideWorldTopLeft.png",
-        // lowerSrc: "./images/maps/LivingRoom.png",
-        upperSrc: "./images/maps/OutsideUpper.png",
-        // Use object for walls for quick lookup
-        walls: {
-            // Brackets are for dynamic keys, inside [] will eval to str
-            [utils.asGridCoord(0,3)]: true,
-            [utils.asGridCoord(1,3)]: true,
-            [utils.asGridCoord(2,3)]: true,
-            [utils.asGridCoord(3,3)]: true,
-            [utils.asGridCoord(4,3)]: true,
-            [utils.asGridCoord(5,3)]: true,
-            [utils.asGridCoord(6,3)]: true,
-            [utils.asGridCoord(7,3)]: true,
-            [utils.asGridCoord(8,3)]: true,
-            // [utils.asGridCoord(9,3)]: true,
-            [utils.asGridCoord(10,3)]: true,
-            [utils.asGridCoord(11,3)]: true,
-            [utils.asGridCoord(12,3)]: true,
-        },
-        configObjects: {
-            hero: {
-                type: "Person",
-                isPlayerControlled: true,
-                x: utils.withGrid(9),
-                y: utils.withGrid(4)
-            },
-            npcD: {
-                type: "Person",
-                x: utils.withGrid(10),
-                y: utils.withGrid(8),
-                src: "./images/characters/people/amethyst.png",
-                talking: [
-                    {
-                    events: [
-                        { type: "textMessage", text: "You made it!", faceHero:"npcB" },
-                    ]
-                    }
-                ]
-            },
-            npcF:{
-                type: "Person",
-                x: utils.withGrid(7),
-                y: utils.withGrid(6),
-                src: "./images/characters/people/pixie.png",
-                talking: [
-                    {
-                    events: [
-                        { type: "textMessage", text: "You made it!", faceHero:"npcD" },
-                    ]
-                    }
-                ]
-            }
-        },
-        initialEvents:[{ who: "hero", type: "walk", direction: "down" } ]
-        ,
-        cutsceneSpaces: {
-            [utils.asGridCoord(9,4)]: [
-                {
-                    events: [
-                        { who: "hero", type: "walk", direction: "up" },
-                        { type: "changeMap", map: "DemoRoom" },
-                    ]
-                }
-            ]
-        }
-    },
-    // Street: {
-
-    // }
 }

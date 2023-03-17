@@ -13,7 +13,6 @@ class InboxMessage {
             <div class="Header">${this.from}:</div>
             <div class="Text">${this.text}</div>
         `);
-        console.log(this.element);
     }
 }
 
@@ -30,8 +29,16 @@ class Inbox {
         this.element.style.display = "none";
     }
 
-    update() {
-        
+    update(e) {
+        console.log("Inbox message should update");
+        const msg = new InboxMessage({
+            text: e.detail.text,
+            from: e.detail.from,
+            time: 0
+        });
+        msg.createElement();
+        this.messages.push(msg);
+        this.element.appendChild(msg.element);
     }
 
 
@@ -41,16 +48,10 @@ class Inbox {
         this.element.innerHTML = (`
             <h1 class="Inbox_title">Inbox</h1>
         `);
-
-        const { playerState } = window;
-        playerState.inbox.forEach((message, index) => {
-        //   const pizza = playerState.pizzas[key];
-            // const {text, from, time} = message;
-            const msg = new InboxMessage(message);
-            msg.createElement();
-            this.messages.push(msg);
-            this.element.appendChild(msg.element);
-        })
+        const updateHandler = e => {
+            this.update(e);
+        }
+        document.addEventListener("NewInboxItem", updateHandler);
     }
 
     init(container) {

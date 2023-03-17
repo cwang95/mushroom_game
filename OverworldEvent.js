@@ -94,7 +94,7 @@ class OverworldEvent {
                 time: "0", 
                 acknowledged: false 
             })
-            utils.emitEvent("NewInboxItem");
+            utils.emitEvent("NewInboxItem", { text: this.event.text, from: this.event.from, acknowledged: false });
             resolve();
         }
 
@@ -136,15 +136,7 @@ class OverworldEvent {
         this.map.unmountObjects()
 
         sceneTransition.init(document.querySelector(".game-container"), () => {
-            if (this.event.heroX && this.event.heroY) {
-                this.map.overworld.transitionMap(
-                    window.OverworldMaps[this.event.map], 
-                    this.event.heroX, 
-                    this.event.heroY);
-
-            } else {
-                this.map.overworld.startMap(window.OverworldMaps[this.event.map]);
-            }
+            this.map.overworld.startMap(window.OverworldMaps[this.event.map], this.event.heroConfig);
             resolve();
 
             sceneTransition.fadeOut();

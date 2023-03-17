@@ -68,37 +68,40 @@ class Overworld {
   })
  }
 
- transitionMap(mapConfig, heroX, heroY) {
-    const mapWithHero = {
-      ...mapConfig,
-      configObjects: {
-        ...mapConfig.configObjects,
-        hero: {
-          ...mapConfig.configObjects.hero,
-          x: heroX,
-          y: heroY
-        }
-      }
-    }
-    console.log(mapWithHero);
-    this.map = new OverworldMap(mapWithHero);
-    this.map.overworld = this;
-    this.map.mountObjects();
-    this.map.playInitialScenes();
- }
-
- startMap(mapConfig) {
+ startMap(mapConfig, heroConfig = null) {
     this.map = new OverworldMap(mapConfig);
     this.map.overworld = this;
     this.map.mountObjects();
+    if (heroConfig) {
+      this.map.gameObjects.hero.x = heroConfig.x;
+      this.map.gameObjects.hero.y = heroConfig.y;
+      this.map.gameObjects.hero.direction = heroConfig.direction;
+    }
     this.map.playInitialScenes();
+
+    this.progress.mapId = mapConfig.id;
+    this.progress.startingHeroX =  this.map.gameObjects.hero.x;
+    this.progress.startingHeroY =  this.map.gameObjects.hero.y;
+    this.progress.startingHeroDirection =  this.map.gameObjects.hero.direction;
  }
 
  init() {
-    this.pda = new Pda();
+    this.progress = new Progress();
+    let heroInitial = null;
+    const savedMap = this.progress.getSaveFile();
+    if (savedMap) {
+      this.progress.load();
+      heroInitial = {
+        x: this.progress.startingHeroX,
+        y: this.progress.startingHeroY,
+        direction: this.progress.startingHeroDirection
+      }
+    }
+    this.pda = new Pda(this.progress);
     this.pda.init(document.querySelector(".game-container"));
 
-    this.startMap(window.OverworldMaps.Bedroom);
+
+    this.startMap(window.OverworldMaps[this.progress.mapId], heroInitial);
 
     this.bindActionHandlers();
     this.bindHeroPositionCheck();

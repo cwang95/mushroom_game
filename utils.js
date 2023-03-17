@@ -24,7 +24,9 @@ const utils = {
         } else if (direction === 'down'){
             y += size;
         }
-        return { x,y };
+        const nextX = x%16===0 ? x : Math.round(x / 16) * 16;
+        const nextY = y%16===0 ? y : Math.round(y / 16) * 16;
+        return { x: nextX, y: nextY };
     },
     oppositeDirection(direction) {
         if (direction === 'left') return 'right';

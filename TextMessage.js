@@ -32,16 +32,9 @@ class TextMessage {
             this.done();
         })
 
-        if (this.isChat) {
-            this.actionListener = new KeypressListener("AllKeys", ()=> {
-                this.done();
-            })
-        } else {
-
-            this.actionListener = new KeypressListener("Enter", ()=> {
-                this.done();
-            })
-        }
+        this.actionListener = new KeypressListener("Enter", ()=> {
+            this.done();
+        })
     }
 
     done() {
