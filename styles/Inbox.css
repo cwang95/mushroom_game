@@ -1,5 +1,5 @@
 .Inbox  {    
-    font-family: "Hellovetica";
+    font-family: 'Orbitron', sans-serif;
     position: absolute;
     left: 0px;
     right: 0px;
@@ -7,17 +7,17 @@
     width: 240px;
     height: 160px;
     padding: 0;
-    background: var(--menu-background);
-    color: var(--menu-font-color);
+    background: #0c629cc4;
+    color: white;
     display: none;
-    font-size: 5px;
+    font-size: 10px;
     image-rendering: pixelated;
 }
 
 .Inbox h1 {
-    background: var(--menu-border-color);
-    color: var(--menu-background);
-    font-size: 7px;
+    background: #073e63f1;
+    color: white;
+    font-size: 12px;
     margin: 0;
     padding: 2px 0 1px 3px;
     image-rendering: pixelated;
@@ -31,12 +31,12 @@
 
 .Inbox_message .Header {
     font-weight: bold;
-    font-size: 4px;
+    font-size: 10px;
     margin-bottom: 1px;
     image-rendering: pixelated;
 }
 .Inbox_message .Text {
-    font-size: 4px;
+    font-size: 10px;
     align-items: baseline;
     padding-top: 1px;
     image-rendering: pixelated;

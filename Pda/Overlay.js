@@ -40,7 +40,6 @@ class Overlay {
         this.element = document.createElement("div");
         this.element.classList.add("Overlay");
         this.element.innerHTML = (`
-          <p class="Overlay_title">${this.type}</p>
           <div class="Overlay_component"></div>
           <button class="Overlay_exit" data-button="Close_overlay">Close</button>
         `);
