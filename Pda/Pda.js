@@ -9,24 +9,19 @@ class Pda {
     }
 
     update() {
-        const { clockState, playerState } = window;
-        // const clockElement = this.pdaElement.querySelector(".Pda_clock");
-        // clockElement.innerText = clockState.getTime();
-        // const inboxElement = this.pdaElement.querySelector(".Pda_inbox");
-        // inboxElement.innerText = `${playerState.inbox.length}`;
-        console.log("PDA update")
-
         this.overlayElement.update();
     }
 
     createElement() {
         this.pdaElement = document.createElement("div");
-        this.pdaElement.classList.add("Pda");
+        this.pdaElement.classList.add("PdaContainer");
         this.pdaElement.innerHTML = (`
-          <p class="Pda_title">PDA</p>
+        <div class="Pda">
+          <p class="Pda_title">my.Cellium</p>
           <button class="Pda_button Overlay_button" data-button="showMap">Map</button>
           <button class="Pda_button Overlay_button" data-button="showInbox">Inbox</button>
           <button class="Pda_button Pda_save_button" data-button="saveGame">Save</button>
+        </div>
         `);
 
         this.pdaElement.querySelectorAll(".Overlay_button").forEach(button => {

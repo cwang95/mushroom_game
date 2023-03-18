@@ -6,6 +6,9 @@
   --menu-border-color: #6b6a64;
   --menu-font-color: #080308;
   --menu-selected-background: #79b7db;
+
+  --pda-background: #0c629cbd;
+  --pda-font-color: white;
 }
 
 * {

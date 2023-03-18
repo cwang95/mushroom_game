@@ -1,33 +1,45 @@
-.Pda {
-    font-family: "Hellovetica";
+.PdaContainer {
+    background-image: url(../images/ui/Pda.png);
     position: absolute;
-    padding: 8px;
+    padding: 16px;
+    left: 0px;
+    top: 0px;
+    width: 64px;
+    height: 80px;
+    image-rendering: pixelated;
+    box-shadow: 5px 5px 5px var(--menu-font-color);
+    border-radius:5px;
+}
+.Pda {    
+    position: absolute;
+    padding: 0 6px 6px 6px;
     margin: 2px;
-    left:2px;
-    top:10px;
+    left: 2px;
+    top: 10px;
     background: var(--menu-background);
     border-top: 1px solid var(--menu-border-color);
     color: var(--menu-font-color);
     image-rendering: pixelated;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
     text-align: center;
+    box-shadow: 2px 2px inset var(--menu-border-color);
+    font-family: 'Orbitron', sans-serif;
 }
 
 .Pda_title {
-    margin: 0;
+    margin: -12px 4px 8px 4px;
     font-size: 6px;
     padding: 0;
     background: none;
     border: 0;
-    font-family: inherit;
+    color: white;
 }
 
 .Pda_button {
     margin: 2px;
-    font-size: 4px;
-    padding: 3px 2px 2px 2px;
+    font-size: 6px;
     background: none;
     border: 0;
     font-family: inherit;

@@ -316,7 +316,21 @@ window.OverworldMaps = {
                 type: "Person",
                 x: utils.withGrid(9),
                 y: utils.withGrid(6),
-                src: "./images/characters/people/Chantrella.png"
+                src: "./images/characters/people/Chantrella.png",
+                talking: [
+                  {
+                    events: [
+                      { type: "textMessage", text: "Hey Hamanita" },
+                      { type: "textMessage", text: "Have you seen Morel?"},
+                      { 
+                          type: "chatMessage", 
+                          text: "Don't tell Chantrella I'm here...", 
+                          from: "Morel", 
+                          acknowledged: false
+                      }
+                    ]
+                  }
+                ]
             }
         },
         gameObjects: {

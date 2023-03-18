@@ -45,12 +45,6 @@ window.timedEvents = {
                 text: "Come to Toadstool now! Hurry!!!", 
                 from: "Morel", 
                 acknowledged: false
-            },
-            { 
-                type: "chatMessage", 
-                text: "Don't tell Chantrella I'm here...", 
-                from: "Morel", 
-                acknowledged: false
             }
         ]
     }

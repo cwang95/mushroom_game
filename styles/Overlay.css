@@ -1,5 +1,4 @@
 .Overlay {    
-    font-family: "Hellovetica";
     position: absolute;
     left: 124px;
     right: 72px;
@@ -10,6 +9,8 @@
     /* border-top: 1px solid var(--menu-border-color); */
     color: var(--menu-font-color);
     display: none;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
 }
 
 .Overlay_exit {
