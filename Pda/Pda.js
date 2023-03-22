@@ -20,6 +20,7 @@ class Pda {
           <p class="Pda_title">my.Cellium</p>
           <button class="Pda_button Overlay_button" data-button="showMap">Map</button>
           <button class="Pda_button Overlay_button" data-button="showInbox">Inbox</button>
+          <button class="Pda_button Dummy_button" data-button="showInbox">Chat</button>
           <button class="Pda_button Pda_save_button" data-button="saveGame">Save</button>
         </div>
         `);

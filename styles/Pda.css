@@ -2,20 +2,21 @@
     background-image: url(../images/ui/Pda3.png);
     position: absolute;
     padding: 16px;
-    left: 0px;
-    top: 0px;
+    left: -10px;
+    top: -10px;
     width: 64px;
     height: 100px;
     image-rendering: pixelated;
-    box-shadow: 5px 5px 5px var(--menu-font-color);
-    border-radius:5px;
+    box-shadow: 6px 6px 6px var(--menu-font-color);
+    border-radius: 10px;
 }
 .Pda {    
     position: absolute;
     padding: 0 6px 6px 6px;
+    height: 60px;
     margin: 2px;
     left: 2px;
-    top: 10px;
+    top: 16px;
     background: var(--menu-background);
     color: var(--menu-font-color);
     image-rendering: pixelated;
@@ -28,7 +29,7 @@
 }
 
 .Pda_title {
-    margin: -10px 4px 8px 4px;
+    margin: -16px 4px 8px 4px;
     font-size: 6px;
     padding: 0;
     background: none;
