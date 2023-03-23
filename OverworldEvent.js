@@ -78,7 +78,7 @@ class OverworldEvent {
         const message = new TextMessage({
             text: this.event.text, 
             isChat: false,
-            from: "Boop", // TODO: UPDATE TEXT TO CONTAIN FROM
+            from: this.event.from || "Boop", // TODO: UPDATE TEXT TO CONTAIN FROM
             onComplete: () => resolve()
         })
 
@@ -141,6 +141,11 @@ class OverworldEvent {
 
             sceneTransition.fadeOut();
         })
+    }
+
+    addStoryFlag(resolve) {
+        window.playerState.storyFlags[this.event.flag] = true;
+        resolve();
     }
 
     init() {
