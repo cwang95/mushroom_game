@@ -6,3 +6,4 @@ mushroom pixel game
 Inspiration for story line comes from 2000s flash game: https://archive.org/details/game_20210614
 
 All pixel art created by me :-)
+See inspiration on my Pinterest: https://pin.it/5ZfyHzy
