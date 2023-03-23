@@ -1551,21 +1551,28 @@ window.OverworldMaps = {
                 y: utils.withGrid(12),
                 src: "./images/characters/people/Morel.png",
                 talking: [
-                  {
-                    events: [
-                      { type: "textMessage", from: "Morel", text: "Hamanita!!" },
-                      { type: "textMessage", from: "Morel", text: "You just missed it!!!"},
-                      { type: "textMessage", from: "Morel", text: "You'll never guess who was in here..."},
-                      { type: "textMessage", from: "Morel", text: "..."},
-                      { type: "textMessage", from: "Morel", text: "..."},
-                      { type: "textMessage", from: "Morel", text: "...Ok fine I'll just tell you"},
-                      { type: "textMessage", from: "Morel", text: "Brian Enoki!"},
-                      { type: "textMessage", from: "Morel", text: "Yeah! Right?"},
-                      { type: "textMessage", from: "Morel", text: "We got to chatting and he invited me to a secret night rave"},
-                      { type: "textMessage", from: "Morel", text: "TONIGHT!"},
-                      { type: "textMessage", from: "Morel", text: "We have to go!"},
-                    ]
-                  }
+                    {
+                        required: ["TALK_TO_MOREL"],
+                        events: [
+                        { type: "textMessage", from: "Morel", text: "You didn't tell Chantrella where I was, right?" },
+                        ]
+                    },
+                    {
+                        events: [
+                        { type: "textMessage", from: "Morel", text: "Hamanita!!" },
+                        { type: "textMessage", from: "Morel", text: "You just missed it!!!"},
+                        { type: "textMessage", from: "Morel", text: "You'll never guess who was in here..."},
+                        { type: "textMessage", from: "Morel", text: "..."},
+                        { type: "textMessage", from: "Morel", text: "..."},
+                        { type: "textMessage", from: "Morel", text: "...Ok fine I'll just tell you"},
+                        { type: "textMessage", from: "Morel", text: "Brian Enoki!"},
+                        { type: "textMessage", from: "Morel", text: "Yeah! Right?"},
+                        { type: "textMessage", from: "Morel", text: "We got to chatting and he invited me to a secret night rave"},
+                        { type: "textMessage", from: "Morel", text: "TONIGHT!"},
+                        { type: "textMessage", from: "Morel", text: "We have to go!"},
+                        { type: "addStoryFlag", flag: "TALK_TO_MOREL"}
+                        ]
+                    }
                 ]
             }
         },
