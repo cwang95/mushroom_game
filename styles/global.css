@@ -21,7 +21,17 @@ body {
   margin: 0;
   overflow: hidden; /* prevent scrolling */
 }
-  
+
+.how-to-play {
+  position: absolute;
+  left:0; right:0;
+  bottom: 0;
+  text-align:center;
+  font-size: 10px;
+  font-family: "Hellovetica";
+  color: #fff;
+  image-rendering: pixelated;
+}  
 
 .game-container {
   position: relative; 

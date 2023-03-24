@@ -1,30 +1,19 @@
 class Overlay {
     constructor() {
         this.element = null;
-        // this.onComplete = 
         this.isActive = false;
-
-        this.map = null;
-        this.inbox = null;
+        this.innerElements = null;
     }
-
-    showMap() {
-        this.map.show();
-        this.inbox.hide();
-    }
-
-    showInbox() {
-        this.inbox.show();
-        this.map.hide();
-    }
-
 
     show(chosen) {
         if (this.isActive == false) {
             this.isActive = true;
             this.element.style.display = "block";
         }
-        this[chosen]();
+        this.innerElements.map(elem => {
+            if (elem.id === chosen) elem.show();
+            else elem.hide();
+        });
     }
 
     hide() {
@@ -32,8 +21,12 @@ class Overlay {
         this.element.style.display = "none";
     }
 
-    update() {
-        this.inbox.update();
+    setInnerElements(elements) {
+        elements.forEach(elem => {
+            console.log(elem);
+            elem.init(this.innerComponent);
+        });
+        this.innerElements = elements;
     }
 
     createElement() {
@@ -45,18 +38,10 @@ class Overlay {
         `);
 
         this.element.querySelector("button").addEventListener("click", () => {
-          //Close the text message
           this.hide();
         });
         
-        const overlayComponent = this.element.querySelector(".Overlay_component");
-
-        // Mount PDA components
-        this.map = new Map();
-        this.map.init(overlayComponent);
-
-        this.inbox = new Inbox();
-        this.inbox.init(overlayComponent);
+        this.innerComponent = this.element.querySelector(".Overlay_component");
     }
 
     init(container) {

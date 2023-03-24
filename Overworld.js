@@ -70,8 +70,17 @@ class Overworld {
     this.progress.startingHeroDirection =  this.map.gameObjects.hero.direction;
  }
 
- init() {
+ async init() {
+    const container = document.querySelector(".game-container");
     this.progress = new Progress();
+
+    // show title screen
+    // this.titleScreen = new TitleScreen({
+    //   progress: this.progress
+    // })
+
+    // const useSaveFile = await this.titleScreen.init(container);
+
     let heroInitial = null;
     const savedMap = this.progress.getSaveFile();
     if (savedMap) {
@@ -81,9 +90,11 @@ class Overworld {
         y: this.progress.startingHeroY,
         direction: this.progress.startingHeroDirection
       }
+    } else {
+      this.instructions = new Instructions();
     }
     this.pda = new Pda(this.progress);
-    this.pda.init(document.querySelector(".game-container"));
+    this.pda.init(container);
 
 
     this.startMap(window.OverworldMaps[this.progress.mapId], heroInitial);

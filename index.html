@@ -9,6 +9,8 @@
     </style>
     <title>mushroom game</title>
     <link rel="icon" type="image/png" href="./images/favicon.PNG">
+
+    <!-- Styles -->
     <link href="./styles/Map.css" type="text/css" rel="stylesheet">
     <link href="./styles/Chat.css" type="text/css" rel="stylesheet">
     <link href="./styles/Inbox.css" type="text/css" rel="stylesheet">
@@ -17,6 +19,7 @@
     <link href="./styles/TextMessage.css" type="text/css" rel="stylesheet">
     <link href="./styles/Pda.css" type="text/css" rel="stylesheet">
     <link href="./styles/SceneTransition.css" type="text/css" rel="stylesheet">
+    <link href="./styles/TitleScreen.css" type="text/css" rel="stylesheet">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,6 +33,9 @@
       <!-- Leave w/h separate from game-container in case we play with canvas zoom -->
       <canvas id="canvas1" class="game-canvas" width="400px" height="240px"></canvas>
     </div>
+    <p class="how-to-play">Use Arrow Keys or WASD to move. Use enter to engage</p>
+    
+
 
     <!-- Scripts -->
     <script src="./utils.js"></script>
@@ -40,15 +46,18 @@
     <script src="./Progress.js"></script>
 
     <!-- PDA logic -->
+    <script src="./Pda/OverlayComponent.js"></script>
     <script src="./Pda/Pda.js"></script>
     <script src="./Pda/Map.js"></script>
     <script src="./Pda/Inbox.js"></script>
     <script src="./Pda/Overlay.js"></script>
+    <script src="./Instructions.js"></script>
     
     <!-- Handlers and Utils -->
     <script src="./DirectionHandler.js"></script>
     <script src="./KeypressListener.js"></script>
     <script src="./RevealingText.js"></script>
+    <script src="./KeyboardMenu.js"></script>
 
     <!-- Overworld Game Scripts -->
     <script src="./Overworld.js"></script>
@@ -64,6 +73,9 @@
     <script src="./TextMessage.js"></script>
     <script src="./MultiMessage.js"></script>
     <script src="./SceneTransition.js"></script>
+    
+    <!-- Event Objects -->
+    <script src="./TitleScreen.js"></script>
 
 
 
