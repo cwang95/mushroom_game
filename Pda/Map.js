@@ -1,16 +1,7 @@
-class Map {
-    constructor() {
-        this.element = null;
-        // this.onComplete = 
-        this.isActive = false;
-    }
-
-    show() {
-        this.element.style.display = "block";
-    }
-
-    hide() {
-        this.element.style.display = "none";
+class Map extends OverlayComponent {
+    constructor(config) {
+        super(config);
+        this.id = "Map"
     }
 
     createElement() {
@@ -25,10 +16,5 @@ class Map {
           //Close the text message
           console.log("Map button clicked");
         });
-    }
-
-    init(container) {
-        this.createElement();
-        container.appendChild(this.element);
     }
 }

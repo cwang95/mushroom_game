@@ -16,17 +16,11 @@ class InboxMessage {
     }
 }
 
-class Inbox {
-    constructor() {
+class Inbox extends OverlayComponent {
+    constructor(config) {
+        super(config)
         this.messages = [];
-    }
-
-    show() {
-        this.element.style.display = "block";
-    }
-
-    hide() {
-        this.element.style.display = "none";
+        this.id = "Inbox";
     }
 
     update(e) {
@@ -61,10 +55,5 @@ class Inbox {
             this.update(e);
         }
         document.addEventListener("NewInboxItem", updateHandler);
-    }
-
-    init(container) {
-        this.createElement();
-        container.appendChild(this.element);
     }
 }
