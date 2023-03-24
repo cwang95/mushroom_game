@@ -28,6 +28,14 @@ const utils = {
         const nextY = y%16===0 ? y : Math.round(y / 16) * 16;
         return { x: nextX, y: nextY };
     },
+    nextPositions(initialX, initialY) {
+        const size = 16;
+        const x = initialX%size===0 ? initialX : Math.round(initialX / size) * size;
+        const y = initialY%size===0 ? initialY : Math.round(initialY / size) * size;
+
+        // return strings for self, up, down, left, & right
+        return [`${x},${y}`, `${x-size},${y}`, `${x+size},${y}`, `${x},${y-size}`, `${x},${y+size}`];
+    },
     oppositeDirection(direction) {
         if (direction === 'left') return 'right';
         if (direction === 'right') return 'left';

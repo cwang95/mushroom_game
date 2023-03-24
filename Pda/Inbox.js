@@ -30,7 +30,6 @@ class Inbox {
     }
 
     update(e) {
-        console.log("Inbox message should update");
         const msg = new InboxMessage({
             text: e.detail.text,
             from: e.detail.from,

@@ -18,7 +18,6 @@ class SceneTransition {
     increaseTime() {
         const { clockState } = window;
         clockState.increaseTime();
-        console.log(clockState.getTime());
         utils.emitEvent("TimePassed");
     }
 

@@ -164,10 +164,7 @@ class OverworldMap {
             })
             await eventHandler.init();
         }
-
         this.isCutscenePlaying = false;
-
-        // console.log(this.gameObjects);
 
         // Reset NPCs 
         Object.values(this.gameObjects).forEach(obj => obj.doBehaviorEvent(this));
@@ -175,17 +172,17 @@ class OverworldMap {
 
     checkForActionCutscene() {
         const hero = this.gameObjects["hero"];
-        const nextCoords = utils.nextPosition(hero.x, hero.y, hero.direction);
-        const match = Object.values(this.gameObjects).find(obj => {
-            return `${obj.x},${obj.y}` === `${nextCoords.x},${nextCoords.y}`
-        })
+        const nextCoordsList = utils.nextPositions(hero.x, hero.y);
+        const match = Object.values(this.gameObjects)
+                        .filter(obj => obj.id !== "hero")
+                        .find(obj => nextCoordsList.indexOf(`${obj.x},${obj.y}`) > -1);
+        
         if (!this.isCutscenePlaying && match && match.talking.length) {
             const relevantScenario = match.talking.find( scenario => {
                 return (scenario.required || []).every(sf => {
                     return window.playerState.storyFlags[sf]
                 })
             });
-
             this.startCutscene(relevantScenario.events);
         }
     }
@@ -201,7 +198,6 @@ class OverworldMap {
 
     checkForFootstepCutscene() {
         const hero = this.gameObjects["hero"];
-        // needs some rounding?
         const roundX = hero.x%16===0 ? hero.x : Math.round(hero.x / 16) * 16;
         const roundY = hero.y%16===0 ? hero.y : Math.round(hero.y / 16) * 16;
         const match = this.cutsceneSpaces[`${roundX},${roundY}`]

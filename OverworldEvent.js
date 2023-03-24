@@ -117,7 +117,6 @@ class OverworldEvent {
             texts: this.event.texts, 
             responses: this.event.responses,
             onComplete: () => {
-                console.log("multi message complete");
                 utils.emitEvent("ConversationComplete", { whoId: this.id });
             }
         })
