@@ -16,23 +16,8 @@ class Overworld {
       const deltaTime = timeStamp - lastTime;
       lastTime = timeStamp;
 
-      // console.log(deltaTime);
       // Clear previous canvas 
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-      // Establish camera person. Camera will follow this person
-      const cameraPerson = this.map.withCameraPerson ? this.map.gameObjects.hero : null;
-
-      // if (this.map.withCameraPerson)
-
-      //  Update all objects before drawing
-      // Object.values(this.map.gameObjects).forEach(object => {
-      //   object.update({
-      //     arrow: this.directionHandler.direction,
-      //     map: this.map,
-      //     deltaTime: deltaTime
-      //   });
-      // })
 
       this.map.updateObjects({
         map: this.map,
