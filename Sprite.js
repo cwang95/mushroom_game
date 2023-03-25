@@ -15,12 +15,6 @@ class Sprite {
         }
         this.useShadow = true;
 
-        // Emotions
-        this.emotions = new Image();
-        this.emotions.src = "./images/emotes/emotes.png";
-        this.emotions.onload = () => {
-            this.isEmotionsLoaded = true;
-        }
 
         this.animations = config.animations || {
             "idle-down" : [ [0,0] ],

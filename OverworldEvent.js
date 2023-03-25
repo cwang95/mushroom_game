@@ -48,6 +48,17 @@ class OverworldEvent {
         resolve();
     }
 
+    teleport(resolve) {
+        const who = this.map.gameObjects[this.event.who];
+        // setTimeout(()=> {
+        //     who.emoting  = null;
+        // }, this.event.time);
+        who.x = this.event.coordinates.x;
+        who.y = this.event.coordinates.y;
+
+        resolve();
+    }
+
     walk(resolve) {
         // pulls reference on window to actual game object
         const who = this.map.gameObjects[this.event.who];
