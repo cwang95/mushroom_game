@@ -3,6 +3,7 @@ class Person extends GameObject {
         super(config);
         this.isPlayerControlled = config.isPlayerControlled || false;
         this.isStanding = false;
+        this.isEmoting = false;
 
         this.movingProgressRemaining = 0;
         // CHANGE SPEED
@@ -36,7 +37,7 @@ class Person extends GameObject {
 
     startBehavior(state, behavior) {
         // Set character direction to whichever behavior has triggered
-        this.direction = behavior.direction;
+        this.direction = behavior.direction ?? "down";
         
         if (behavior.type === "walk") {
             // Stop here if there is a wall
@@ -65,6 +66,14 @@ class Person extends GameObject {
             this.updateSprite(state);
             this.isStanding = false;
         }
+
+        // if (behavior.type === "emote") {
+        //     this.emoting = true;
+        //     setTimeout(()=> {
+        //         utils.emitEvent("PersonEmotionComplete", { whoId: this.id})
+        //         this.emoting = false;
+        //     }, 1000);
+        // }
     }
 
     updatePosition(deltaTime) {

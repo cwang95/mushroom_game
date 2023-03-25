@@ -15,6 +15,13 @@ class Sprite {
         }
         this.useShadow = true;
 
+        // Emotions
+        this.emotions = new Image();
+        this.emotions.src = "./images/emotes/emotes.png";
+        this.emotions.onload = () => {
+            this.isEmotionsLoaded = true;
+        }
+
         this.animations = config.animations || {
             "idle-down" : [ [0,0] ],
             "idle-right": [ [0,1] ],
@@ -68,6 +75,15 @@ class Sprite {
 
         if (this.frame === undefined) {
             this.currentAnimationFrame = 0;
+        }
+    }
+
+    drawEmotion(ctx, xOffset, yOffset, emotionHandler) {
+        const x = this.gameObject.x + 3 + xOffset;
+        const y = this.gameObject.y - 29 + yOffset; 
+
+        if (this.gameObject.emoting) {
+            emotionHandler.emote(ctx, x, y, this.gameObject.emoting);
         }
     }
 
