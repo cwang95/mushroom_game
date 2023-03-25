@@ -167,6 +167,11 @@ class OverworldEvent {
         resolve();
     }
 
+    removeStoryFlag(resolve) {
+        window.playerState.storyFlags[this.event.flag] = false;
+        resolve();
+    }
+
     init() {
         return new Promise(resolve => {
             // this.event.type => walk/stand
