@@ -2,7 +2,7 @@ class EmotionHandler {
     constructor() {
         // Emotions
         this.emotions = new Image();
-        this.emotions.src = "./images/emotes/emotes.png";
+        this.emotions.src = "./images/emotions.png";
         this.emotions.onload = () => {
             this.isEmotionsLoaded = true;
         }
@@ -17,9 +17,12 @@ class EmotionHandler {
             "exclamation" : [2,0],
             "dots" : [2,1],
             "x" : [2,2],
+            "sideeye" : [3,0],
+            "sweat" : [3,1],
+            "yes" : [3,2],
         }
     }
-    
+
     emote(ctx, x, y, emotion = "blush") {
         const [frameX, frameY] = this.emotionMap[emotion];
         this.isEmotionsLoaded && ctx.drawImage(
