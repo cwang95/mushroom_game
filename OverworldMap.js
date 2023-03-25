@@ -46,15 +46,20 @@ class OverworldMap {
         const xOffset = this.withCameraPerson ? utils.withGrid(MAP_TOP_X*2) - this.gameObjects.hero.x :  utils.withGrid(MAP_TOP_X);
         const yOffset = this.withCameraPerson ? utils.withGrid(MAP_TOP_Y*2) - this.gameObjects.hero.y :  utils.withGrid(MAP_TOP_Y);
 
+        const sortedObjs = Object.values(this.gameObjects)
+                            .sort((a,b)=> {
+                            return a.y-b.y;
+                            })
         this.drawLower(ctx, xOffset, yOffset);
         //  Draw game objects
-        Object.values(this.gameObjects)
-            .sort((a,b)=> {
-            return a.y-b.y;
-            }).forEach(object => {
+        sortedObjs.forEach(object => {
             object.sprite.draw(ctx, xOffset, yOffset);
         })
         this.drawUpper(ctx, xOffset, yOffset);
+
+        sortedObjs.forEach(object => {
+            object.sprite.drawEmotion(ctx, xOffset, yOffset, this.overworld.emotionHandler);
+        });
     }
 
     drawLower(ctx, x, y) {
@@ -324,7 +329,9 @@ window.OverworldMaps = {
                     required: ["TALKED_TO_CHANTRELLA"],
                     events: [
                         { type: "textMessage", from: "Chantrella", text: "How did I get in here?" },
+                        { type: "emote", emotion: "dots", who: "Chantrella", time: 2000},
                         { type: "textMessage", from: "Chantrella", text: "......" },
+                        { type: "emote", emotion: "dots", who: "hero", time: 2000},
                     ]
                 },
                   {
@@ -337,6 +344,8 @@ window.OverworldMaps = {
                           from: "Morel", 
                           acknowledged: false
                       },
+                      { type: "emote", emotion: "x", who: "hero", time: 1000},
+                      { type: "textMessage", from: "Chantrella", text: "Oh..... ok... well let me know if you hear from her"},
                       { type: "addStoryFlag", flag: "TALKED_TO_CHANTRELLA"}
                     ]
                   },
@@ -1629,13 +1638,16 @@ window.OverworldMaps = {
                         { type: "textMessage", from: "Morel", text: "Hamanita!!" },
                         { type: "textMessage", from: "Morel", text: "You just missed it!!!"},
                         { type: "textMessage", from: "Morel", text: "You'll never guess who was in here..."},
+                        { type: "emote", emotion: "neutral", who: "hero", time: 2000},
                         { type: "textMessage", from: "Morel", text: "..."},
                         { type: "textMessage", from: "Morel", text: "..."},
                         { type: "textMessage", from: "Morel", text: "...Ok fine I'll just tell you"},
                         { type: "textMessage", from: "Morel", text: "Brian Enoki!"},
+                        { type: "emote", emotion: "exclamation", who: "hero", time: 1000},
                         { type: "textMessage", from: "Morel", text: "Yeah! Right?"},
                         { type: "textMessage", from: "Morel", text: "We got to chatting and he invited me to a secret night rave"},
                         { type: "textMessage", from: "Morel", text: "TONIGHT!"},
+                        { type: "emote", emotion: "heart", who: "hero", time: 2000},
                         { type: "textMessage", from: "Morel", text: "We have to go!"},
                         { type: "addStoryFlag", flag: "TALK_TO_MOREL"}
                         ]

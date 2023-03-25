@@ -36,7 +36,16 @@ class OverworldEvent {
 
         // Attach the complete handler to PersonWalkingComplete dispatch event
         document.addEventListener("PersonStandComplete", completeHandler)
+    }
 
+    emote(resolve) {
+        const who = this.map.gameObjects[this.event.who];
+        who.emoting  = this.event.emotion;
+        setTimeout(()=> {
+            who.emoting  = null;
+        }, this.event.time);
+
+        resolve();
     }
 
     walk(resolve) {

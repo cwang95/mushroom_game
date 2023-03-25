@@ -81,6 +81,9 @@ class Overworld {
 
     // const useSaveFile = await this.titleScreen.init(container);
 
+    this.settings = new Settings();
+    this.settings.init(container);
+
     let heroInitial = null;
     const savedMap = this.progress.getSaveFile();
     if (savedMap) {
@@ -90,11 +93,12 @@ class Overworld {
         y: this.progress.startingHeroY,
         direction: this.progress.startingHeroDirection
       }
-    } else {
-      this.instructions = new Instructions();
     }
+
     this.pda = new Pda(this.progress);
     this.pda.init(container);
+
+    this.emotionHandler = new EmotionHandler();
 
 
     this.startMap(window.OverworldMaps[this.progress.mapId], heroInitial);

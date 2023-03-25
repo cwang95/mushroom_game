@@ -23,7 +23,6 @@ class Overlay {
 
     setInnerElements(elements) {
         elements.forEach(elem => {
-            console.log(elem);
             elem.init(this.innerComponent);
         });
         this.innerElements = elements;
