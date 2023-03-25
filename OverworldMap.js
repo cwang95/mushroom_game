@@ -136,6 +136,11 @@ class OverworldMap {
             object.id = key;
 
             let instance;
+            const hasRequired = (object.required || []).every(sf => {
+                return window.playerState.storyFlags[sf];
+            });
+
+            if (!hasRequired) return;
 
             if (object.type === "Person") {
                 instance = new Person(object);
@@ -323,6 +328,7 @@ window.OverworldMaps = {
                 type: "Person",
                 x: utils.withGrid(9),
                 y: utils.withGrid(6),
+                required: ["INTRO"],
                 src: "./images/characters/people/Chantrella.png",
                 talking: [
                 {
@@ -1632,6 +1638,7 @@ window.OverworldMaps = {
                 type: "Person",
                 x: utils.withGrid(18),
                 y: utils.withGrid(12),
+                required: ["INTRO"],
                 src: "./images/characters/people/Morel.png",
                 talking: [
                     {
@@ -1700,7 +1707,7 @@ window.OverworldMaps = {
                             { type: "walk", who: "Morel", direction: "down", time: 1000 },
                             { type: "walk", who: "Morel", direction: "down", time: 1000 },
                             { type: "teleport", who: "Morel", coordinates: { x: utils.withGrid(-1000), y: utils.withGrid(-1000) } },
-                            // { type: "removeStoryFlag", flag: "INTRO" }
+                            { type: "removeStoryFlag", flag: "INTRO" }
                             // { type: "stand", direction: "right", who: "hero", time: 1000 },
                             // { type: "emote", emotion: "dots", who: "Morel", time: 2000},
                             // { type: "stand", direction: "left", who: "hero", time: 1000 },
