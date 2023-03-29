@@ -34,7 +34,7 @@
   <body>
     <div class="game-container">
       <!-- Leave w/h separate from game-container in case we play with canvas zoom -->
-      <canvas id="canvas1" class="game-canvas" width="400px" height="240px"></canvas>
+      <canvas id="canvas1" class="game-canvas"></canvas>
     </div>
     <p class="how-to-play">Use Arrow Keys or WASD to move. Use enter to engage</p>
     
@@ -42,45 +42,49 @@
 
     <!-- Scripts -->
     <script src="./utils.js"></script>
+    
+    <!-- Components  -->
+    <script src="./components/OverlayComponent.js"></script>
+    <script src="./components/Overlay.js"></script>
+    <script src="./components/TitleScreen.js"></script>
+    <script src="./components/Instructions.js"></script>
+    <script src="./components/KeyboardMenu.js"></script>
+
+    <!-- In-game components -->
+    <script src="./components/TextMessage.js"></script>
+    <script src="./components/MultiMessage.js"></script>
+    <script src="./components/SceneTransition.js"></script>
+    <script src="./components/RevealingText.js"></script>
+
+    <!-- PDA Component -->
+    <script src="./components/Pda/Pda.js"></script>
+    <script src="./components/Pda/Map.js"></script>
+    <script src="./components/Pda/Inbox.js"></script>
 
     <!-- Global State Handlers -->
     <script src="./State/ClockState.js"></script>
     <script src="./State/PlayerState.js"></script>
+    <script src="./State/SizeState.js"></script>
     <script src="./Progress.js"></script>
-
-    <!-- PDA logic -->
-    <script src="./Pda/OverlayComponent.js"></script>
-    <script src="./Pda/Pda.js"></script>
-    <script src="./Pda/Map.js"></script>
-    <script src="./Pda/Inbox.js"></script>
-    <script src="./Pda/Overlay.js"></script>
     
     <!-- Handlers and Utils -->
     <script src="./DirectionHandler.js"></script>
     <script src="./KeypressListener.js"></script>
-    <script src="./RevealingText.js"></script>
-    <script src="./KeyboardMenu.js"></script>
     <script src="./EmotionHander.js"></script>
 
     <!-- Overworld Game Scripts -->
     <script src="./Overworld.js"></script>
     <script src="./OverworldMap.js"></script>
 
-    <!-- Game Object Classes -->
-    <script src="./GameObject.js"></script>
-    <script src="./StaticGameObject.js"></script>
-    <script src="./Person.js"></script>
-    <script src="./Sprite.js"></script>
 
-    <!-- Event Objects -->
+    <!-- Event handling Scripts -->
     <script src="./OverworldEvent.js"></script>
-    <script src="./TextMessage.js"></script>
-    <script src="./MultiMessage.js"></script>
-    <script src="./SceneTransition.js"></script>
-    
-    <!-- Intro objects -->
-    <script src="./TitleScreen.js"></script>
-    <script src="./Instructions.js"></script>
+
+    <!-- Game Object Modules -->
+    <script src="./modules/GameObject.js"></script>
+    <script src="./modules/StaticGameObject.js"></script>
+    <script src="./modules/Person.js"></script>
+    <script src="./modules/Sprite.js"></script>
 
 
 

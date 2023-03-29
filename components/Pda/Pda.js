@@ -54,6 +54,14 @@ class Pda {
         ];
     }
 
+    updateSize() {
+        if (window.sizeState.size  === "small") {
+            this.pdaElement.classList.add("sizeSmall")
+        } else {
+            this.pdaElement.classList.remove("sizeSmall")
+        }
+    }
+
     createElement() {
         this.pdaElement = document.createElement("div");
         this.pdaElement.classList.add("PdaContainer");

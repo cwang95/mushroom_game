@@ -2,10 +2,29 @@ class Overworld {
   constructor(config) {
     this.element = config.element;
     this.canvas = this.element.querySelector(".game-canvas");
+    this.canvas.style.width='100%';
+    this.canvas.style.height='100%';
+    this.canvas.width  = this.canvas.offsetWidth;
+    this.canvas.height = this.canvas.offsetHeight;
     this.ctx = this.canvas.getContext("2d");
     this.map = null;
-    //  this.width = config.width;
-    //  this.height = config.height;
+  }
+
+  resizeCanvas() {
+    console.log("x: " + window.innerWidth+"      y: " + window.innerHeight);
+    if (window.innerWidth <= 865) {
+      this.element.style.width='200px';
+      window.sizeState.updateSize("small");
+    }
+    if (window.innerWidth >= 865) {
+      this.element.style.width='400px';
+      window.sizeState.updateSize("medium");
+    }
+    this.canvas.style.width='100%';
+    this.canvas.style.height='100%';
+    this.canvas.width  = this.canvas.offsetWidth;
+    this.canvas.height = this.canvas.offsetHeight;
+    if (this.pda!= null) this.pda.updateSize();
   }
 
   startGameLoop() {
@@ -35,6 +54,10 @@ class Overworld {
       // Check for person
       this.map.checkForActionCutscene();
     });
+  }
+
+  bindResizeHandler() {
+    window.addEventListener("resize", utils.debounce((e)=> {this.resizeCanvas(e)}));
   }
 
   bindHeroPositionCheck() {
@@ -74,7 +97,6 @@ class Overworld {
   }
 
   async init() {
-    const container = document.querySelector(".game-container");
     this.progress = new Progress();
 
     // show title screen
@@ -82,10 +104,10 @@ class Overworld {
     //   progress: this.progress
     // })
 
-    // const useSaveFile = await this.titleScreen.init(container);
+    // const useSaveFile = await this.titleScreen.init(this.element);
 
     this.settings = new Settings();
-    this.settings.init(container);
+    this.settings.init(this.element);
 
     let heroInitial = null;
     const savedMap = this.progress.getSaveFile();
@@ -99,7 +121,7 @@ class Overworld {
     }
 
     this.pda = new Pda(this.progress);
-    this.pda.init(container);
+    this.pda.init(this.element);
 
     this.emotionHandler = new EmotionHandler();
 
@@ -107,11 +129,14 @@ class Overworld {
     this.startMap(window.OverworldMaps[this.progress.mapId], heroInitial);
 
     this.bindActionHandlers();
+    this.bindResizeHandler()
     this.bindHeroPositionCheck();
     this.bindClockCheck();
 
     this.directionHandler = new DirectionHandler();
     this.directionHandler.init();
+
+    this.resizeCanvas();
 
     this.startGameLoop();
   }
