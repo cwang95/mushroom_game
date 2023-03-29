@@ -35,11 +35,13 @@ class Sprite {
 
         this.animationFrameProgress = this.animationFrameLimit;
 
-
         this.gameObject = config.gameObject;
 
         this.height = config.height || 32;
         this.width = config.width || 32;
+
+        this.offsetHeight = config.offsetHeight ?? 0;
+        this.offsetWidth = config.offsetWidth ?? 0;
     }
 
     get frame() {
@@ -87,38 +89,17 @@ class Sprite {
 
         const [spriteFrameX, spriteFrameY] = this.frame;
         
-        this.isShadowLoaded && ctx.drawImage(this.shadow, x,y)
+        this.isShadowLoaded && ctx.drawImage(this.shadow, x, y)
         this.isLoaded && ctx.drawImage(
             this.image, 
-            spriteFrameX * this.height, //left cut 
-            spriteFrameY * this.width, //top cut,
-            this.height, //width of cut
-            this.width, //height of cut
-            x, // Canvas X
-            y, // Canvas Y
-            this.height,
-            this.width
-         )
-        this.updateAnimationProgress();
-    }
-
-    drawWithCameraPerson(ctx, cameraPerson) {
-        const x = this.gameObject.x - 8 + utils.withGrid(MAP_TOP_X*2) - cameraPerson.x;
-        const y = this.gameObject.y - 18 + utils.withGrid(MAP_TOP_Y*2) - cameraPerson.y; 
-
-        const [spriteFrameX, spriteFrameY] = this.frame;
-        
-        this.isShadowLoaded && ctx.drawImage(this.shadow, x,y)
-        this.isLoaded && ctx.drawImage(
-            this.image, 
-            spriteFrameX * 32, //left cut 
-            spriteFrameY * 32, //top cut,
-            32, //width of cut
-            32, //height of cut
-            x, // Canvas X
-            y, // Canvas Y
-            32,
-            32
+            spriteFrameX * this.width, //left cut 
+            spriteFrameY * this.height, //top cut,
+            this.width, //width of cut
+            this.height, //height of cut
+            x - this.offsetWidth, // Canvas X
+            y - this.offsetHeight, // Canvas Y
+            this.width,
+            this.height
          )
         this.updateAnimationProgress();
     }

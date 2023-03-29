@@ -41,14 +41,7 @@ class Person extends GameObject {
         
         if (behavior.type === "walk") {
             // Stop here if there is a wall
-            if (state.map.isSpaceTaken(this.x, this.y, this.direction)) {
-                if (behavior.retry) {
-                    setTimeout(()=> {
-                        const nextDirectionToTry = utils.oppositeDirection(this.direction);
-                        this.startBehavior(state, { ...behavior, direction: nextDirectionToTry })
-                    }, 1000);
-                }
-                
+            if (state.map.isSpaceTaken(this.x, this.y, this.direction) && this.isPlayerControlled) {
                 return;
             }
             // Ready to walk

@@ -1,6 +1,6 @@
 class PlayerState {
     constructor() {
-        this.storyFlags = { "INTRO": true };
+        this.storyFlags = { "INTRO": true, "NO_CHECK": true };
         this.inbox = [];
     }
 

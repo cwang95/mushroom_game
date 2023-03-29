@@ -9,7 +9,9 @@ class GameObject {
             gameObject: this,
             src: config.src || "./images/characters/people/hero.png",
             height: config.height,
-            width: config.width
+            width: config.width,
+            offsetWidth: config.offsetWidth,
+            offsetHeight: config.offsetHeight
         })
 
         // Grab behavior loop from config or set to nothing

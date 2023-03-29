@@ -1,16 +1,14 @@
-// Keeps track of state
-// Overall world of game
 class Overworld {
- constructor(config) {
+  constructor(config) {
     this.element = config.element;
     this.canvas = this.element.querySelector(".game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.map = null;
     //  this.width = config.width;
     //  this.height = config.height;
- }
+  }
 
- startGameLoop() {
+  startGameLoop() {
     let lastTime = 0;
     const step = (timeStamp) => {
       const deltaTime = timeStamp - lastTime;
@@ -27,33 +25,34 @@ class Overworld {
 
       this.map.draw(this.ctx);
 
-      requestAnimationFrame((ts)=>{ step(ts)})
-   }
-   step(lastTime);
- }
+      requestAnimationFrame((ts) => { step(ts) })
+    }
+    step(lastTime);
+  }
 
- bindActionHandlers() {
-   new KeypressListener("Enter", ()=> {
-     // Check for person
-     this.map.checkForActionCutscene();
-   });
- }
+  bindActionHandlers() {
+    new KeypressListener("Enter", () => {
+      // Check for person
+      this.map.checkForActionCutscene();
+    });
+  }
 
- bindHeroPositionCheck() {
-   document.addEventListener("PersonWalkingComplete", e => {
-     if (e.detail.whoId==="hero") {
-       this.map.checkForFootstepCutscene();
-     }
-   })
- }
+  bindHeroPositionCheck() {
+    document.addEventListener("PersonWalkingComplete", e => {
+      if (e.detail.whoId === "hero") {
+        this.map.checkForFootstepCutscene();
+        this.map.checkForStaticObjectAnimation();
+      }
+    })
+  }
 
- bindClockCheck() {
-  document.addEventListener("TimePassed", e  => {
-    this.map.checkForTimedCutscene();
-  })
- }
+  bindClockCheck() {
+    document.addEventListener("TimePassed", e => {
+      this.map.checkForTimedCutscene();
+    })
+  }
 
- startMap(mapConfig, heroConfig = null) {
+  startMap(mapConfig, heroConfig = null) {
     this.map = new OverworldMap(mapConfig);
     this.map.overworld = this;
     this.map.mountObjects();
@@ -61,16 +60,20 @@ class Overworld {
       this.map.gameObjects.hero.x = heroConfig.x;
       this.map.gameObjects.hero.y = heroConfig.y;
       this.map.gameObjects.hero.direction = heroConfig.direction;
+      if (heroConfig.nearDoor) {
+        const door = this.map.gameObjects[heroConfig.nearDoor];
+        door?.propOpen();
+      }
     }
     this.map.playInitialScenes();
 
     this.progress.mapId = mapConfig.id;
-    this.progress.startingHeroX =  this.map.gameObjects.hero.x;
-    this.progress.startingHeroY =  this.map.gameObjects.hero.y;
-    this.progress.startingHeroDirection =  this.map.gameObjects.hero.direction;
- }
+    this.progress.startingHeroX = this.map.gameObjects.hero.x;
+    this.progress.startingHeroY = this.map.gameObjects.hero.y;
+    this.progress.startingHeroDirection = this.map.gameObjects.hero.direction;
+  }
 
- async init() {
+  async init() {
     const container = document.querySelector(".game-container");
     this.progress = new Progress();
 
