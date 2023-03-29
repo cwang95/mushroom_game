@@ -1,0 +1,59 @@
+.PdaContainer {
+    background-image: url(../images/ui/Pda3.png);
+    position: absolute;
+    padding: 16px;
+    left: -10px;
+    top: -10px;
+    width: 64px;
+    height: 100px;
+    image-rendering: pixelated;
+    box-shadow: 6px 6px 6px var(--menu-font-color);
+    border-radius: 10px;
+}
+.Pda {    
+    position: absolute;
+    padding: 0 6px 6px 6px;
+    height: 60px;
+    margin: 2px;
+    left: 2px;
+    top: 16px;
+    background: var(--menu-background);
+    color: var(--menu-font-color);
+    image-rendering: pixelated;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    text-align: center;
+    box-shadow: 2px 2px inset var(--menu-border-color);
+    font-family: 'Orbitron', sans-serif;
+}
+
+.Pda_title {
+    margin: -16px 4px 8px 4px;
+    font-size: 6px;
+    padding: 0;
+    background: none;
+    border: 0;
+    color: white;
+    font-family: inherit;
+}
+
+.Pda_button {
+    margin: 2px;
+    font-size: 6px;
+    background: none;
+    border: 0;
+    font-family: inherit;
+}
+.Pda_button:hover {
+    background: lavender;
+}
+
+.Pda_clock {
+    font-family: "Helvetica";
+    font-size: 6px;
+}
+.Pda_inbox {
+    font-family: "Helvetica";
+    font-size: 6px;
+}

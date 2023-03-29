@@ -1,0 +1,43 @@
+.Inbox  {    
+    font-family: 'Orbitron', sans-serif;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    width: 240px;
+    height: 160px;
+    padding: 0;
+    background: #0c629cc4;
+    color: white;
+    display: none;
+    font-size: 10px;
+    image-rendering: pixelated;
+}
+
+.Inbox h1 {
+    background: #073e63f1;
+    color: white;
+    font-size: 12px;
+    margin: 0;
+    padding: 2px 0 1px 3px;
+    image-rendering: pixelated;
+}
+
+.Inbox_message {
+    display: inherit;
+    margin: 4px 2px;
+    image-rendering: pixelated;
+}
+
+.Inbox_message .Header {
+    font-weight: bold;
+    font-size: 10px;
+    margin-bottom: 1px;
+    image-rendering: pixelated;
+}
+.Inbox_message .Text {
+    font-size: 10px;
+    align-items: baseline;
+    padding-top: 1px;
+    image-rendering: pixelated;
+}
