@@ -10,6 +10,12 @@
     box-shadow: 6px 6px 6px var(--menu-font-color);
     border-radius: 10px;
 }
+
+.PdaContainer.sizeSmall {
+    left: 0px;
+    top: -30px;
+}
+
 .Pda {    
     position: absolute;
     padding: 0 6px 6px 6px;

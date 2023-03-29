@@ -164,11 +164,13 @@ class OverworldEvent {
 
     addStoryFlag(resolve) {
         window.playerState.storyFlags[this.event.flag] = true;
+        utils.emitEvent("StoryFlagAdded", { flag: this.event.flag });
         resolve();
     }
 
     removeStoryFlag(resolve) {
         window.playerState.storyFlags[this.event.flag] = false;
+        utils.emitEvent("StoryFlagRemoved", { flag: this.event.flag });
         resolve();
     }
 
