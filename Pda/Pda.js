@@ -10,13 +10,21 @@ class Pda {
     }
 
       getOptions() {
-        return [
+        return [,
             {
                 label: "my.Cellium",
                 classList: ["Pda_title"],
                 data: "PdaButton",
                 disabled: true,
-                handler: ()=> {}
+                handler: ()=> {
+                    console.log("My.Cellium")
+                }
+            },
+            {
+              label: window.clockState.getTime(),
+              classList: ["Pda_button", "Clock"],
+              data: "PdaButton",
+              handler: ()=> {}
             },
             {
                 label: "Map",
@@ -61,5 +69,8 @@ class Pda {
         this.overlayElement.init(container);
         this.overlayElement.setInnerElements([new Map(), new Inbox()])
         container.appendChild(this.pdaElement);
+        document.addEventListener("TimePassed", e => {
+            this.keyboardMenu.updateLabel("Clock", e.detail.time);
+        })
     }
 }

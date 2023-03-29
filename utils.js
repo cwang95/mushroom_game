@@ -1,4 +1,14 @@
 const utils = {
+    getInteractionRadius(x, y, radius) {
+        const result = {};
+        for (let i = -radius; i <= radius; i+= 16) {
+          for (let j = -radius; j <= radius; j+=16) {
+            result[`${x + i},${y + j}`] = true;
+          }
+        }
+        // console.log(result);
+        return result;
+    },
     withGrid(n) {
         return n * 16;
     },
@@ -34,7 +44,7 @@ const utils = {
         const y = initialY%size===0 ? initialY : Math.round(initialY / size) * size;
 
         // return strings for self, up, down, left, & right
-        return [`${x},${y}`, `${x-size},${y}`, `${x+size},${y}`, `${x},${y-size}`, `${x},${y+size}`];
+        return [`${x},${y}`, `${x-size},${y}`,`${x+size*2},${y}`, `${x+size},${y}`, `${x},${y-size}`, `${x},${y+size}`];
     },
     oppositeDirection(direction) {
         if (direction === 'left') return 'right';

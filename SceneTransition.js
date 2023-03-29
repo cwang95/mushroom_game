@@ -17,8 +17,8 @@ class SceneTransition {
 
     increaseTime() {
         const { clockState } = window;
-        clockState.increaseTime();
-        utils.emitEvent("TimePassed");
+        const newTime = clockState.increaseTime();
+        utils.emitEvent("TimePassed", { time: newTime });
     }
 
     init(container, callback) {

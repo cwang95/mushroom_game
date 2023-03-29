@@ -8,15 +8,25 @@ class OverworldMap {
         // Live Objects are in here
         this.gameObjects = {};
 
+
         // Configs for live objects live here
         this.configObjects = config.configObjects;
-
 
         // Collisions
         this.walls = config.walls || {};
 
         this.withCameraPerson = config.withCameraPerson || false;
         // this.cameraPerson = this.withCameraPerson ? this.gameObjects.hero : null;
+        // this.cameraPersonBoundX = 
+        // this.cameraBoundaryX = config.cameraBoundaryX 
+
+        this.camera = {
+            "xRight": utils.withGrid(-8),
+            "xLeft": utils.withGrid(4),
+            "yDown": utils.withGrid(-2),
+            "yUp": utils.withGrid(1),
+            ...config.camera,
+        }
         
         // Floor
         this.lowerImage = new Image();
@@ -42,9 +52,17 @@ class OverworldMap {
         })
     }
 
+    getXOffset() {
+        return Math.min(this.camera.xLeft, Math.max(utils.withGrid(MAP_TOP_X*2) - this.gameObjects.hero.x, this.camera.xRight));
+    }
+
+    getYOffset() {
+        return Math.min(this.camera.yUp, Math.max(utils.withGrid(MAP_TOP_Y*2) - this.gameObjects.hero.y, this.camera.yDown));
+    }
+
     draw(ctx) {
-        const xOffset = this.withCameraPerson ? utils.withGrid(MAP_TOP_X*2) - this.gameObjects.hero.x :  utils.withGrid(MAP_TOP_X);
-        const yOffset = this.withCameraPerson ? utils.withGrid(MAP_TOP_Y*2) - this.gameObjects.hero.y :  utils.withGrid(MAP_TOP_Y);
+        const xOffset = this.withCameraPerson ? this.getXOffset() :  utils.withGrid(MAP_TOP_X);
+        const yOffset = this.withCameraPerson ? this.getYOffset() :  utils.withGrid(MAP_TOP_Y);
 
         const sortedObjs = Object.values(this.gameObjects)
                             .sort((a,b)=> {
@@ -78,64 +96,56 @@ class OverworldMap {
         );
     }
 
-    drawObj(ctx, xOffset, yOffset) {
-        Object.values(this.gameObjects)
-          .sort((a,b)=> {
-            return a.y-b.y;
-          }).forEach(object => {
-            object.sprite.drawWithCameraPerson(ctx, xOffset, yOffset);
-        })
-    }
-
-    drawLowerImage(ctx) {
-        ctx.drawImage(
-            this.lowerImage, 
-            utils.withGrid(MAP_TOP_X), 
-            utils.withGrid(MAP_TOP_Y)
-        );
-    }
-    
-    drawUpperImage(ctx) {
-        ctx.drawImage(
-            this.upperImage, 
-            utils.withGrid(MAP_TOP_X), 
-            utils.withGrid(MAP_TOP_Y)
-        );
-    }
-
-    drawLowerImageWithCameraPerson(ctx, cameraPerson) {
-        ctx.drawImage(
-            this.lowerImage, 
-            utils.withGrid(MAP_TOP_X*2) - cameraPerson.x, 
-            utils.withGrid(MAP_TOP_Y*2) - cameraPerson.y
-        );
-    }
-    
-    drawUpperImageWithCameraPerson(ctx, cameraPerson) {
-        ctx.drawImage(
-            this.upperImage, 
-            utils.withGrid(MAP_TOP_X*2) - cameraPerson.x, 
-            utils.withGrid(MAP_TOP_Y*2) - cameraPerson.y
-        );
-    }
-
     isSpaceTaken(currentX, currentY, direction) {
         const {x,y} = utils.nextPosition(currentX, currentY, direction);
         return this.walls[`${x},${y}`] || false;
     }
 
     playInitialScenes() {
-        if (this.initialEvents.length) {
-            this.startCutscene(this.initialEvents);
+        if (this.initialEvents?.events?.length) {
+            const hasRequired = (this.initialEvents.required || []).every(sf => {
+                return window.playerState.storyFlags[sf];
+            });
+            if (hasRequired) this.startCutscene(this.initialEvents.events);
         }
     }
 
+    mountNewObject() {
+        Object.keys(this.configObjects).forEach(key => {
+            const object = this.gameObjects[key];
+            const configObject = this.configObjects[key];
+            if (!object) {
+                let instance;
+    
+                const hasRequired = (configObject.required || []).every(sf => {
+                    return window.playerState.storyFlags[sf];
+                });
+    
+                if (!hasRequired) return;
+    
+                if (configObject.type === "Person") {
+                    instance = new Person(configObject);
+                }  else if (configObject.type === "StaticGameObject") {
+                    instance = new StaticGameObject(configObject);
+                }
+    
+                this.gameObjects[key] = instance;
+                this.gameObjects[key].id = key;
+                this.gameObjects[key].type = configObject.type;
+    
+                instance.mount(this);
+            }
+        });
+    }
+
     mountObjects() {
+        // Mount game objects
         Object.keys(this.configObjects).forEach(key => {
             let object = this.configObjects[key];
             object.id = key;
 
             let instance;
+
             const hasRequired = (object.required || []).every(sf => {
                 return window.playerState.storyFlags[sf];
             });
@@ -144,13 +154,17 @@ class OverworldMap {
 
             if (object.type === "Person") {
                 instance = new Person(object);
+            }  else if (object.type === "StaticGameObject") {
+                instance = new StaticGameObject(object);
             }
 
             this.gameObjects[key] = instance;
             this.gameObjects[key].id = key;
+            this.gameObjects[key].type = object.type;
 
             instance.mount(this);
-        })
+        });
+        document.addEventListener("StoryFlagAdded", e => { this.mountNewObject()})
     }
 
     unmountObjects() {
@@ -161,6 +175,8 @@ class OverworldMap {
             // Can add logic mounting objects here
             object.unmount(this);
         })
+        document.addEventListener("StoryFlagAdded", e => { this.mountNewObject()})
+        // document.removeEventListener("StoryFlagAdded", this.mountNewObject.bind(this));
     }
 
     async startCutscene(events) {
@@ -197,6 +213,33 @@ class OverworldMap {
         }
     }
 
+    checkForStaticObjectAnimation() {
+        const hero = this.gameObjects["hero"];
+        const roundX = hero.x%16===0 ? hero.x : Math.round(hero.x / 16) * 16;
+        const roundY = hero.y%16===0 ? hero.y : Math.round(hero.y / 16) * 16;
+        const coordinates = `${roundX},${roundY}`;
+        const match = Object.values(this.gameObjects)
+                        .filter(obj => obj.type === "StaticGameObject" && obj.radiusInteraction);
+
+        match.forEach(staticObject => {
+            let interaction = staticObject.interactionSpaces?.[coordinates];
+            if (interaction) {
+                this.startCutscene(interaction.events);
+            }  
+            if (staticObject.radius[coordinates]) {
+                if (!staticObject.nearHero) {
+                  staticObject.heroApproach(this, coordinates);
+                }
+                staticObject.nearHero = true;
+            } else {
+                if (staticObject.nearHero) {
+                    staticObject.heroLeave();
+                }
+                staticObject.nearHero = false;
+            }
+        })
+    }
+
     checkForTimedCutscene() {
         const { clockState, timedEvents } = window;
         const match = timedEvents[clockState.time];
@@ -216,6 +259,7 @@ class OverworldMap {
         }
     }
 }
+
 
 window.OverworldMaps = {
     Bedroom: {
@@ -315,6 +359,13 @@ window.OverworldMaps = {
     },
     LivingRoom: {
         id: "LivingRoom",
+        withCameraPerson: true,
+        camera: {
+            xRight: utils.withGrid(5),
+            xLeft: utils.withGrid(5),
+            yUp: utils.withGrid(3),
+            yDown: utils.withGrid(3),
+        },
         lowerSrc: "./images/maps/LivingRoomLower.png",
         upperSrc: "./images/maps/LivingRoomUpper.png",
         configObjects: {
@@ -435,7 +486,17 @@ window.OverworldMaps = {
                 {
                     events: [
                         { who: "hero", type: "walk", direction: "down" },
-                        { type: "changeMap", map: "Outside" },
+                        { 
+                            type: "changeMap", 
+                            map: "Outside", 
+                            heroConfig: {
+                                x: utils.withGrid(3),
+                                y: utils.withGrid(7),
+                                direction: "up",
+                                nearDoor: "HomeDoor"
+                            } 
+                        }
+                        // { type: "changeMap", map: "Outside", heroConfig: { nearDoor: "HomeDoor" }},
                     ]
                 }
             ],
@@ -480,7 +541,27 @@ window.OverworldMaps = {
                 isPlayerControlled: true,
                 x: utils.withGrid(3),
                 y: utils.withGrid(7)
-            }
+            },
+            HomeDoor: {
+                type: "StaticGameObject",
+                height: 28,
+                width: 22,
+                src: "./images/objects/HomeDoor.png",// TODO: Add shadow to PNG 
+                x: utils.withGrid(3),
+                y: utils.withGrid(6),
+                offsetX: 6,
+                offsetY: 3,
+                animations: {
+                    "idle" : [ [0,0] ],
+                    "moveNear" : [ [0,0], [1,0], [2,0], [3,0], [4,0]],
+                    "near" : [ [4,0] ],
+                    "moveFar" : [ [4,0], [3,0], [2,0], [1,0], [0,0] ],
+                },
+                animationFrameLimit: 25,
+                radius: utils.withGrid(3),
+                radiusInteraction: true,
+                userInteraction: false
+            },
         },
         walls: {
             // Invisible wall left
@@ -973,13 +1054,124 @@ window.OverworldMaps = {
         // lowerSrc: "./images/maps/LivingRoom.png",
         upperSrc: "./images/maps/ToadstoolUpper.png",
         withCameraPerson: true,
+        camera: {
+            "yDown": utils.withGrid(-4)
+        },
         configObjects: {
             hero: {
                 type: "Person",
                 isPlayerControlled: true,
                 x: utils.withGrid(14),
                 y: utils.withGrid(4)
-            }
+            },
+            ToadstoolDoor: {
+                type: "StaticGameObject",
+                height: 46,
+                width: 26,
+                src: "./images/objects/ToadstoolDoor.png",// TODO: Add shadow to PNG 
+                x: utils.withGrid(24),
+                y: utils.withGrid(7),
+                offsetX: 4,
+                offsetY: 4,
+                animations: {
+                    "idle" : [ [0,0] ],
+                    "moveNear" : [ [0,0], [1,0], [2,0], [3,0], [4,0]],
+                    "near" : [ [4,0] ],
+                    "moveFar" : [ [4,0], [3,0], [2,0], [1,0], [0,0] ],
+                },
+                animationFrameLimit: 25,
+                radius: utils.withGrid(4),
+                radiusInteraction: true,
+                userInteraction: false
+            },
+            CandyCapDoor: {
+                type: "StaticGameObject",
+                height: 50,
+                width: 36,
+                src: "./images/objects/CandyCapDoor.png",// TODO: Add shadow to PNG 
+                x: utils.withGrid(5),
+                y: utils.withGrid(6),
+                offsetX: 5,
+                offsetY: 11,
+                animations: {
+                    "idle" : [ [0,0] ],
+                    "moveNear" : [ [0,0], [1,0], [2,0], [3,0], [4,0]],
+                    "near" : [ [4,0] ],
+                    "moveFar" : [ [4,0], [3,0], [2,0], [1,0], [0,0] ],
+                },
+                animationFrameLimit: 25,
+                radius: utils.withGrid(5),
+                radiusInteraction: true,
+                userInteraction: false,
+                interactionSpaces: {
+                    // [utils.asGridCoord(5, 9)]: {
+                    //     events: [
+                    //         {type: "walk", who: "hero", direction: "up", time: 1000},
+                            
+                    //     {
+                    //     type: "changeMap", 
+                    //     map: "CandyCap", 
+                    //     heroConfig: {
+                    //         x: utils.withGrid(5), 
+                    //         y: utils.withGrid(7), 
+                    //         direction: "down"
+                    //     }
+                    // }]},
+                    [utils.asGridCoord(5, 9)]: {
+                        events: [{
+                        type: "changeMap", 
+                        map: "CandyCap", 
+                        heroConfig: {
+                            x: utils.withGrid(5), 
+                            y: utils.withGrid(7), 
+                            direction: "down"
+                        }
+                    }]},
+                    [utils.asGridCoord(6, 9)]: {
+                        events: [{
+                        type: "changeMap", 
+                        map: "CandyCap", 
+                        heroConfig: {
+                            x: utils.withGrid(5), 
+                            y: utils.withGrid(7), 
+                            direction: "down"
+                        }
+                    }]},
+                },
+                required: ["KANDI_MSG"]
+                // into Candy Cap
+                // [utils.asGridCoord(5, 8)]: [
+                //     {
+                //         events: [
+                //             { 
+                //                 type: "changeMap", 
+                //                 map: "CandyCap", 
+                //                 heroConfig: {
+                //                     x: utils.withGrid(5), 
+                //                     y: utils.withGrid(7), 
+                //                     direction: "down"
+                //                 }
+                //             },
+                //         ]
+                //     }
+                // ],
+                // // into Candy Cap
+                // [utils.asGridCoord(6, 8)]: [
+                //     {
+                //         events: [
+                //             { 
+                //                 type: "changeMap", 
+                //                 map: "CandyCap", 
+                //                 heroConfig: {
+                //                     x: utils.withGrid(5), 
+                //                     y: utils.withGrid(7), 
+                //                     direction: "down"
+                //                 }
+                //             },
+                //         ]
+                //     }
+                // ],
+            },
         },
         walls: {
             // invisible wall upper
@@ -1233,6 +1425,38 @@ window.OverworldMaps = {
                     ]
                 }
             ],
+            // // into Candy Cap
+            // [utils.asGridCoord(5, 8)]: [
+            //     {
+            //         events: [
+            //             { 
+            //                 type: "changeMap", 
+            //                 map: "CandyCap", 
+            //                 heroConfig: {
+            //                     x: utils.withGrid(5), 
+            //                     y: utils.withGrid(7), 
+            //                     direction: "down"
+            //                 }
+            //             },
+            //         ]
+            //     }
+            // ],
+            // // into Candy Cap
+            // [utils.asGridCoord(6, 8)]: [
+            //     {
+            //         events: [
+            //             { 
+            //                 type: "changeMap", 
+            //                 map: "CandyCap", 
+            //                 heroConfig: {
+            //                     x: utils.withGrid(5), 
+            //                     y: utils.withGrid(7), 
+            //                     direction: "down"
+            //                 }
+            //             },
+            //         ]
+            //     }
+            // ],
             // To outside 12
             [utils.asGridCoord(32, 10)]: [
                 {
@@ -1243,7 +1467,7 @@ window.OverworldMaps = {
                             heroConfig: {
                                 x: utils.withGrid(1), 
                                 y: utils.withGrid(9), 
-                                direction: "right"
+                                direction: "down"
                             }
                         },
                     ]
@@ -1316,6 +1540,9 @@ window.OverworldMaps = {
         lowerSrc: "./images/maps/TownSquareLower2.png",
         upperSrc: "./images/maps/TownSquareUpper2.png",
         withCameraPerson: true,
+        camera: {
+            "yDown": utils.withGrid(-3)
+        },
         configObjects: {
             hero: {
                 type: "Person",
@@ -1330,7 +1557,25 @@ window.OverworldMaps = {
                 src: "./images/characters/people/OysterGuy.png",// TODO: Add shadow to PNG 
                 x: utils.withGrid(11),
                 y: utils.withGrid(4)
-            }
+            },
+            Fountain: {
+                type: "StaticGameObject",
+                height: 60,
+                width: 60,
+                src: "./images/objects/Fountain.png",// TODO: Add shadow to PNG 
+                x: utils.withGrid(15),
+                y: utils.withGrid(7),
+                offsetX: 11,
+                offsetY: 10,
+                animations: {
+                    "idle": [ [0,0], [1,0], [2,0], [3,0]],
+                    "move": [[0,0]],
+                    "near": [[0,0]]
+                },
+                animationFrameLimit: 20,
+                radiusInteraction: false,
+                userInteraction: false
+            },
         },
         walls: {
             // invisible wall upper
@@ -1671,7 +1916,6 @@ window.OverworldMaps = {
                             { type: "emote", emotion: "exclamation", who: "Morel", time: 2000},
                             { type: "stand", direction: "left", who: "hero", time: 800 },
                             { type: "stand", direction: "left", who: "Morel", time: 1000},
-                            { type: "stand", direction: "right", who: "hero", time: 1000 },
                             { type: "textMessage", from: "Morel", text: "Oh! Hi Chantrella...."},
                             { type: "textMessage", from: "Morel", text: "Uhh.... Hamanita and I just ran into each other here"},
                             { type: "emote", emotion: "dots", who: "hero", time: 1000},
@@ -1871,7 +2115,8 @@ window.OverworldMaps = {
                             heroConfig: {
                                 x: utils.withGrid(24), 
                                 y: utils.withGrid(11), 
-                                direction: "down"
+                                direction: "down",
+                                nearDoor: "ToadstoolDoor"
                             }
                         },
                     ]
@@ -2129,5 +2374,177 @@ window.OverworldMaps = {
                 }
             ],
         },
+    },
+    CandyCap: {
+        id: "CandyCap",
+        withCameraPerson: true,
+        camera: {
+            xRight: utils.withGrid(5),
+            xLeft: utils.withGrid(5),
+            yUp: utils.withGrid(3),
+            yDown: utils.withGrid(3),
+        },
+        lowerSrc: "./images/maps/CandyCapLower.png",
+        upperSrc: "./images/maps/CandyCapUpper.png",
+        configObjects: {
+            hero: {
+                type: "Person",
+                isPlayerControlled: true,
+                x: utils.withGrid(5),
+                y: utils.withGrid(7),
+            },
+            Kandi: {
+                type: "Person",
+                x: utils.withGrid(8),
+                y: utils.withGrid(3),
+                offsetHeight: 16,
+                offsetWidth: 12,
+                // required: ["WO"],
+                height: 48,
+                width: 48,
+                src: "./images/characters/people/Kandi.png",
+                talking: [
+                {
+                    required: ["TALKED_TO_KANDI"],
+                    events: [
+                        { type: "textMessage", from: "Kandi", text: "It's so sad isn't it?" },
+                        { type: "textMessage", from: "Kandi", text: "At least now I can focus on my music" },
+                    ]
+                }
+                ]
+            }
+        },
+        gameObjects: {
+
+        },
+        initialEvents: {
+            // required: ["NO_CHECK"],
+            events: [
+            { type: "textMessage", from: "Kandi", text: "Oh Hamanita you're here" },
+            { type: "walk", who: "Kandi", direction: "right", time: 1000 },
+            { type: "walk", who: "Kandi", direction: "right", time: 1000 },
+            { type: "walk", who: "Kandi", direction: "right", time: 1000 },
+            { type: "walk", who: "Kandi", direction: "down", time: 1000 },
+            { type: "walk", who: "Kandi", direction: "down", time: 1000 },
+            { type: "walk", who: "Kandi", direction: "down", time: 1000 },
+            { type: "walk", who: "Kandi", direction: "down", time: 1000 },
+            { type: "stand", who: "hero", direction: "right" },
+            { type: "walk", who: "Kandi", direction: "left", time: 1000 },
+            { type: "walk", who: "Kandi", direction: "left", time: 1000 },
+            { type: "walk", who: "Kandi", direction: "left", time: 1000 },
+            { type: "walk", who: "Kandi", direction: "left", time: 1000 },
+            { type: "textMessage", from: "Kandi", text: "Here's your check from last week" },
+            { type: "textMessage", from: "Kandi", text: "Now about that news..." },
+            { type: "textMessage", from: "Kandi", text: "That gosh dang health inspector dropped by again" },
+            { type: "textMessage", from: "Kandi", text: "Said we can't stay open" },
+            { type: "textMessage", from: "Kandi", text: "We have to close for the day and deep clean everything" },
+            { type: "emote", emotion: "sweat", who: "hero", time: 3000},
+            { type: "textMessage", from: "Kandi", text: "You're not doing anything tonight are you?" },
+            { type: "emote", emotion: "dots", who: "hero", time: 2000},
+            { type: "emote", emotion: "dots", who: "hero", time: 2000},
+            { type: "textMessage", from: "Kandi", text: "Oh, you do have plans?" },
+            { type: "textMessage", from: "Kandi", text: "That's surprising I didn't know you had any friends" },
+            { type: "textMessage", from: "Kandi", text: "They've never been around here that's for sure" },
+            { type: "textMessage", from: "Kandi", text: "They don't come here because it's gross? That's not even true!" },
+            { type: "textMessage", from: "Kandi", text: "..." },
+            // { type: "fly" },
+            { type: "textMessage", from: "Kandi", text: "Ok well... if no one's going to clean up around here I guess I'll just have to shut down shop" },
+            { type: "textMessage", from: "Kandi", text: "No ice cream for Mushroom Town today!" },
+            // { type: "textMessage", from: "Kandi", text: "I'll pay you with " },
+            { type: "walk", who: "Kandi", direction: "down", time: 1000 },
+            { type: "walk", who: "Kandi", direction: "left", time: 1000 },
+            { type: "walk", who: "Kandi", direction: "down", time: 1000 },
+            { type: "walk", who: "Kandi", direction: "down", time: 1000 },
+            { type: "teleport", who: "Kandi", coordinates: { x: utils.withGrid(-1000), y: utils.withGrid(-1000) } },
+            { type: "addStoryFlag", flag: "TALKED_TO_KANDI"},
+            { type: "removeStoryFlag", flag: "NO_CHECK"}
+        ]},
+        // Use object for walls for quick lookup
+        walls: {
+
+            // top wall
+            [utils.asGridCoord(0,2)]: true,
+            [utils.asGridCoord(1,2)]: true,
+            [utils.asGridCoord(2,2)]: true,
+            [utils.asGridCoord(3,2)]: true,
+            [utils.asGridCoord(4,2)]: true,
+            [utils.asGridCoord(5,2)]: true,
+            [utils.asGridCoord(6,2)]: true,
+            [utils.asGridCoord(7,2)]: true,
+            [utils.asGridCoord(8,2)]: true,
+            [utils.asGridCoord(9,2)]: true,
+            [utils.asGridCoord(10,2)]: true,
+            [utils.asGridCoord(11,2)]: true,
+
+            // left wall
+            [utils.asGridCoord(-1,0)]: true,
+            [utils.asGridCoord(-1,1)]: true,
+            [utils.asGridCoord(-1,2)]: true,
+            [utils.asGridCoord(-1,3)]: true,
+            [utils.asGridCoord(-1,4)]: true,
+            [utils.asGridCoord(-1,5)]: true,
+            [utils.asGridCoord(-1,6)]: true,
+            [utils.asGridCoord(-1,7)]: true,
+            [utils.asGridCoord(-1,8)]: true,
+
+            // right wall
+            [utils.asGridCoord(12,0)]: true,
+            [utils.asGridCoord(12,1)]: true,
+            [utils.asGridCoord(12,2)]: true,
+            [utils.asGridCoord(12,3)]: true,
+            [utils.asGridCoord(12,4)]: true,
+            [utils.asGridCoord(12,5)]: true,
+            [utils.asGridCoord(12,6)]: true,
+            [utils.asGridCoord(12,7)]: true,
+            [utils.asGridCoord(12,8)]: true,
+
+
+            // Lower wall
+            [utils.asGridCoord(0,9)]: true,
+            [utils.asGridCoord(1,9)]: true,
+            [utils.asGridCoord(2,9)]: true,
+            [utils.asGridCoord(3,9)]: true,
+            [utils.asGridCoord(4,9)]: true,
+            [utils.asGridCoord(5,9)]: true,
+            // Exit point to outside
+            // [utils.asGridCoord(6,9)]: true,
+            [utils.asGridCoord(7,9)]: true,
+            [utils.asGridCoord(8,9)]: true,
+            [utils.asGridCoord(9,9)]: true,
+            [utils.asGridCoord(10,9)]: true,
+            [utils.asGridCoord(11,9)]: true,
+
+            [utils.asGridCoord(2,4)]: true,
+            [utils.asGridCoord(3,4)]: true,
+            [utils.asGridCoord(4,4)]: true,
+            [utils.asGridCoord(5,4)]: true,
+            [utils.asGridCoord(6,4)]: true,
+            [utils.asGridCoord(7,4)]: true,
+            [utils.asGridCoord(8,4)]: true,
+            [utils.asGridCoord(9,4)]: true,
+
+            // stool 
+            [utils.asGridCoord(10,8)]: true,
+            [utils.asGridCoord(2,8)]: true,
+            [utils.asGridCoord(1,7)]: true,
+        },
+        cutsceneSpaces: {
+            [utils.asGridCoord(6,9)]: [
+                {
+                    events: [
+                        { who: "hero", type: "walk", direction: "down" },
+                        { type: "changeMap", map: "Toadstool",
+                            heroConfig: { 
+                                x: utils.withGrid(5),  
+                                y: utils.withGrid(10), 
+                                direction: "down", 
+                                nearDoor: "CandyCapDoor"
+                            } 
+                        },
+                    ]
+                }
+            ],
+        }
+
     },
 }
