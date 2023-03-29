@@ -1,0 +1,35 @@
+{
+  "name": "my-webpack-project",
+  "version": "1.0.0",
+  "description": "My webpack project",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "build": "webpack --mode=production --node-env=production",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --watch",
+    "serve": "webpack serve",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "repository": {
+    "url": "git+https://github.com/cwang95/mushroom_game.git"
+  },
+  "keywords": [
+    "mush",
+    "room",
+    "game"
+  ],
+  "author": "crystal",
+  "license": "ISC",
+  "devDependencies": {
+    "@webpack-cli/generators": "^3.0.1",
+    "gh-pages": "^5.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "prettier": "^2.7.1",
+    "webpack": "^5.76.3",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.13.1"
+  }
+}
