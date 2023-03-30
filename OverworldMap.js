@@ -51,7 +51,7 @@ class OverworldMap {
 
     getXOffset() {
         const snipLeft = this.camera.xLeft + window.sizeState.heroOffsetX/2;
-        const snipRight = this.camera.xRight - window.sizeState.heroOffsetX;
+        const snipRight = this.camera.xRight - window.sizeState.heroOffsetX*2;
         const posX = Math.min(snipLeft, Math.max(utils.withGrid(MAP_TOP_X * 2) - this.gameObjects.hero.x, snipRight));
         return posX - window.sizeState.heroOffsetX;
     }

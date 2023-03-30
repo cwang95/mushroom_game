@@ -12,8 +12,7 @@
 }
 
 .PdaContainer.sizeSmall {
-    left: 0px;
-    top: -30px;
+    display: none;
 }
 
 .Pda {    

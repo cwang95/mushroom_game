@@ -44,6 +44,12 @@ body {
   transform: scale(2) translateY(50%);
 }
 
+.game-container.sizeSmall {
+  width: 160px;
+  /* margin-top: 200px; */
+  transform: scale(2) translateY(35%);
+}
+
 /* super cool and important css style */
 .game-container canvas {
   image-rendering: pixelated;
