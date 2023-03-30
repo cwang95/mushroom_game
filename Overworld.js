@@ -1,6 +1,7 @@
 class Overworld {
   constructor(config) {
     this.element = config.element;
+    this.controller = config.controllerElement;
     this.canvas = this.element.querySelector(".game-canvas");
     this.canvas.style.width='100%';
     this.canvas.style.height='100%';
@@ -11,13 +12,14 @@ class Overworld {
   }
 
   resizeCanvas() {
-    console.log("x: " + window.innerWidth+"      y: " + window.innerHeight);
     if (window.innerWidth <= 865) {
-      this.element.style.width='200px';
+      this.element.classList.add("sizeSmall");
+      this.controller.classList.add("sizeSmall");
       window.sizeState.updateSize("small");
     }
     if (window.innerWidth >= 865) {
-      this.element.style.width='400px';
+      this.element.classList.remove("sizeSmall");
+      this.controller.classList.remove("sizeSmall");
       window.sizeState.updateSize("medium");
     }
     this.canvas.style.width='100%';
