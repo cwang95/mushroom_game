@@ -11,7 +11,27 @@
     border-radius: 10px;
 }
 
+
+/* SMALL PDA STYLING */
 .PdaContainer.sizeSmall {
+    background-image: none;
+    left: 0px;
+    top: 190px;
+    box-shadow: none;
+    border-radius: 0px;
+    height: 20px;
+}
+
+.PdaContainer.sizeSmall > .Pda {
+    display: flex;
+    flex-direction: row;
+    background: var(--menu-background);
+    color: var(--menu-font-color);
+    height: 30px;
+    align-items: center;
+}
+
+.PdaContainer.sizeSmall > .Pda > .Pda_title {
     display: none;
 }
 

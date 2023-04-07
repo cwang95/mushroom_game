@@ -7,7 +7,9 @@ class SizeState {
         }
     }
 
-    get heroOffsetX() { return this.offsetMap[this.size] ?? 0 }
+    get heroOffsetX() { 
+        return this.offsetMap[this.size] ?? 0 
+    }
 
     updateSize(newSize) {
         this.size = newSize;

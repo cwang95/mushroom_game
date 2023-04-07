@@ -12,21 +12,28 @@ class Overworld {
   }
 
   resizeCanvas() {
+    let newSize = "medium";
     if (window.innerWidth <= 865) {
       this.element.classList.add("sizeSmall");
       this.controller.classList.add("sizeSmall");
       window.sizeState.updateSize("small");
+      newSize = "small";
     }
     if (window.innerWidth >= 865) {
       this.element.classList.remove("sizeSmall");
       this.controller.classList.remove("sizeSmall");
       window.sizeState.updateSize("medium");
+      newSize = "medium";
     }
     this.canvas.style.width='100%';
     this.canvas.style.height='100%';
     this.canvas.width  = this.canvas.offsetWidth;
     this.canvas.height = this.canvas.offsetHeight;
+
+    utils.emitEvent("CanvasSizeChanged", { newSize });
+
     if (this.pda!= null) this.pda.updateSize();
+    if (this.cameraHandler != null) this.cameraHandler.updateSize(newSize);
   }
 
   startGameLoop() {
@@ -127,6 +134,9 @@ class Overworld {
 
     this.emotionHandler = new EmotionHandler();
 
+    this.gameController = new GameController({ element: this.controller });
+    this.gameController.init();
+
 
     this.startMap(window.OverworldMaps[this.progress.mapId], heroInitial);
 
@@ -137,6 +147,9 @@ class Overworld {
 
     this.directionHandler = new DirectionHandler();
     this.directionHandler.init();
+
+    // this.cameraHandler = new CameraHandler(config.cameraConfig || {});
+    // this.cameraHandler.init();
 
     this.resizeCanvas();
 

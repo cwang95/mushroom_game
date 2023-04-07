@@ -4,8 +4,10 @@
     left: 0px;
     right: 0px;
     top: 0px;
-    width: 240px;
-    height: 160px;
+    /* width: 240px;
+    height: 160px; */
+    width: inherit;
+    height: 200px;
     padding: 4px;
     background: var(--menu-background);
     color: var(--menu-font-color);
