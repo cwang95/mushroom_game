@@ -19,10 +19,12 @@ class GameController {
             button.addEventListener('mouseup', () => {
                 utils.emitEvent("ControllerMouseup", { code: button.id });
             });
-            button.addEventListener('pointerdown', () => {
+            button.addEventListener('pointerdown', (e) => {
+                e.preventDefault()
                 utils.emitEvent("ControllerMousedown", { code: button.id });
             });
-            button.addEventListener('pointerup', () => {
+            button.addEventListener('pointerup', (e) => {
+                e.preventDefault()
                 utils.emitEvent("ControllerMouseup", { code: button.id });
             });
         })
