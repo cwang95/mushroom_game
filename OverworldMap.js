@@ -1,4 +1,4 @@
-const MAP_TOP_X = 6.5;
+const MAP_TOP_X = 3.5;
 const MAP_TOP_Y = 3.5
 
 class OverworldMap {
@@ -15,16 +15,16 @@ class OverworldMap {
         // Collisions
         this.walls = config.walls || {};
 
-        this.withCameraPerson = config.withCameraPerson || false;
+        this.withCameraPerson = config.withCameraPerson || true;
 
         this.useZoomSnapping = true;
 
         this.camera = {
-            "xRight": utils.withGrid(-8),
-            "xLeft": utils.withGrid(4),
+            "xRight": utils.withGrid(-6),
+            "xLeft": utils.withGrid(6),
             "yDown": utils.withGrid(-2),
             "yUp": utils.withGrid(1),
-            ...config.camera,
+            // ...config.camera,
         }
 
         this.lowerImage = new Image();
@@ -37,6 +37,9 @@ class OverworldMap {
         this.cutsceneSpaces = config.cutsceneSpaces || {};
 
         this.initialEvents = config.initialEvents || {};
+
+        this.cameraHandler = new CameraHandler(config.cameraConfig || {});
+        this.cameraHandler.init();
     }
 
     updateObjects(state) {
@@ -49,20 +52,21 @@ class OverworldMap {
         })
     }
 
-    getXOffset() {
-        const snipLeft = this.camera.xLeft + window.sizeState.heroOffsetX/2;
-        const snipRight = this.camera.xRight - window.sizeState.heroOffsetX*2;
-        const posX = Math.min(snipLeft, Math.max(utils.withGrid(MAP_TOP_X * 2) - this.gameObjects.hero.x, snipRight));
-        return posX - window.sizeState.heroOffsetX;
-    }
+    // getXOffset() {
+    //     const snipLeft = this.camera.xLeft;
+    //     const snipRight = this.camera.xRight;
+    //     const posX = Math.min(snipLeft, Math.max(utils.withGrid(MAP_TOP_X * 2) - this.gameObjects.hero.x, snipRight));
+    //     return posX - window.sizeState.heroOffsetX;
+    // }
 
-    getYOffset() {
-        return Math.min(this.camera.yUp, Math.max(utils.withGrid(MAP_TOP_Y * 2) - this.gameObjects.hero.y, this.camera.yDown));
-    }
+    // getYOffset() {
+    //     return Math.min(this.camera.yUp, Math.max(utils.withGrid(MAP_TOP_Y * 2) - this.gameObjects.hero.y, this.camera.yDown));
+    // }
 
     draw(ctx) {
-        const xOffset = this.withCameraPerson ? this.getXOffset() : utils.withGrid(MAP_TOP_X) - this.gameObjects.hero.x;
-        const yOffset = this.withCameraPerson ? this.getYOffset() : utils.withGrid(MAP_TOP_Y);
+        // const xOffset = this.getXOffset();
+        const yOffset = this.cameraHandler.getCameraY(this.gameObjects.hero.y);
+        const xOffset = this.cameraHandler.getCameraX(this.gameObjects.hero.x);
 
         const sortedObjs = Object.values(this.gameObjects)
             .sort((a, b) => {
@@ -175,6 +179,7 @@ class OverworldMap {
             // Can add logic mounting objects here
             object.unmount(this);
         })
+        // unmount camerahandler?
         document.addEventListener("StoryFlagAdded", e => { this.mountNewObject() })
         // document.removeEventListener("StoryFlagAdded", this.mountNewObject.bind(this));
     }
@@ -264,6 +269,28 @@ class OverworldMap {
 window.OverworldMaps = {
     Bedroom: {
         id: "Bedroom",
+        mapWidth: utils.withGrid(8),
+        mapHeight:  utils.withGrid(9),
+        cameraConfig: {
+            mapWidth: utils.withGrid(9),
+            mapHeight:  utils.withGrid(9),
+            small: {
+                followHero: true,
+                cameraX: utils.withGrid(7),
+                cameraY: utils.withGrid(12),
+                boundaries: {
+                    left: utils.withGrid(6),
+                    right: utils.withGrid(3),
+                    up: utils.withGrid(9),
+                    down:  utils.withGrid(9)
+                }
+            },
+            medium: {
+                followHero: false,
+                cameraX: utils.withGrid(5),
+                cameraY: utils.withGrid(3),
+            }
+        },
         lowerSrc: "./images/maps/BedroomLower.png",
         upperSrc: "./images/maps/BedroomUpper.png",
         configObjects: {
@@ -359,7 +386,26 @@ window.OverworldMaps = {
     },
     LivingRoom: {
         id: "LivingRoom",
-        withCameraPerson: true,
+        cameraConfig: {
+            mapWidth: utils.withGrid(9),
+            mapHeight:  utils.withGrid(9),
+            small: {
+                followHero: true,
+                cameraX: utils.withGrid(7),
+                cameraY: utils.withGrid(12),
+                boundaries: {
+                    left: utils.withGrid(6),
+                    right: utils.withGrid(0),
+                    up: utils.withGrid(9),
+                    down:  utils.withGrid(9)
+                }
+            },
+            medium: {
+                followHero: false,
+                cameraX: utils.withGrid(5),
+                cameraY: utils.withGrid(3),
+            }
+        },
         camera: {
             xRight: utils.withGrid(5),
             xLeft: utils.withGrid(5),
@@ -377,7 +423,7 @@ window.OverworldMaps = {
             },
             Chantrella: {
                 type: "Person",
-                x: utils.withGrid(9),
+                x: utils.withGrid(7),
                 y: utils.withGrid(6),
                 required: ["INTRO"],
                 src: "./images/characters/people/Chantrella.png",
@@ -536,7 +582,6 @@ window.OverworldMaps = {
         lowerSrc: "./images/maps/OutsideLower.png",
         // lowerSrc: "./images/maps/LivingRoom.png",
         upperSrc: "./images/maps/OutsideUpper.png",
-        withCameraPerson: true,
         configObjects: {
             hero: {
                 type: "Person",
@@ -757,7 +802,6 @@ window.OverworldMaps = {
         lowerSrc: "./images/maps/Outside01Lower.png",
         // lowerSrc: "./images/maps/LivingRoom.png",
         upperSrc: "./images/maps/Outside01Upper.png",
-        withCameraPerson: true,
         configObjects: {
             hero: {
                 type: "Person",
@@ -1057,7 +1101,6 @@ window.OverworldMaps = {
         lowerSrc: "./images/maps/ToadstoolLower.png",
         // lowerSrc: "./images/maps/LivingRoom.png",
         upperSrc: "./images/maps/ToadstoolUpper.png",
-        withCameraPerson: true,
         camera: {
             "yDown": utils.withGrid(-4)
         },
@@ -1545,7 +1588,10 @@ window.OverworldMaps = {
         id: "TownSquare",
         lowerSrc: "./images/maps/TownSquareLower2.png",
         upperSrc: "./images/maps/TownSquareUpper2.png",
-        withCameraPerson: true,
+        cameraConfig: {
+            mapWidth: utils.withGrid(33),
+            mapHeight: utils.withGrid(17)
+        },
         camera: {
             "yDown": utils.withGrid(-3)
         },
@@ -1870,7 +1916,32 @@ window.OverworldMaps = {
         id: "ToadstoolInside",
         lowerSrc: "./images/maps/ToadstoolInsideLower.png",
         upperSrc: "./images/maps/ToadstoolInsideUpper.png",
-        withCameraPerson: true,
+        cameraConfig: {
+            mapWidth: utils.withGrid(20),
+            mapHeight:  utils.withGrid(16),
+            small: {
+                followHero: true,
+                cameraX: utils.withGrid(5),
+                cameraY: utils.withGrid(6),
+                boundaries: {
+                    left: utils.withGrid(4),
+                    right: utils.withGrid(3),
+                    up: utils.withGrid(4),
+                    down:  utils.withGrid(8)
+                }
+            },
+            medium: {
+                followHero: true,
+                cameraX: utils.withGrid(11),
+                cameraY: utils.withGrid(11),
+                boundaries: {
+                    left: utils.withGrid(6),
+                    right: utils.withGrid(12),
+                    up: utils.withGrid(10),
+                    down:  utils.withGrid(4)
+                }
+            }
+        },
         configObjects: {
             hero: {
                 type: "Person",
@@ -2136,7 +2207,6 @@ window.OverworldMaps = {
         lowerSrc: "./images/maps/Outside12Lower.png",
         // lowerSrc: "./images/maps/LivingRoom.png",
         upperSrc: "./images/maps/Outside12Upper.png",
-        withCameraPerson: true,
         configObjects: {
             hero: {
                 type: "Person",
@@ -2383,12 +2453,31 @@ window.OverworldMaps = {
     },
     CandyCap: {
         id: "CandyCap",
-        withCameraPerson: true,
         camera: {
-            xRight: utils.withGrid(5),
+            xRight: utils.withGrid(6),
             xLeft: utils.withGrid(5),
             yUp: utils.withGrid(3),
             yDown: utils.withGrid(3),
+        },
+        cameraConfig: {
+            mapWidth: utils.withGrid(12),
+            mapHeight:  utils.withGrid(10),
+            small: {
+                followHero: true,
+                cameraX: utils.withGrid(3),
+                cameraY: utils.withGrid(9),
+                boundaries: {
+                    left: utils.withGrid(2),
+                    right: utils.withGrid(6),
+                    up: utils.withGrid(7),
+                    down:  utils.withGrid(2)
+                }
+            },
+            medium: {
+                followHero: false,
+                cameraX: utils.withGrid(6),
+                cameraY: utils.withGrid(2)
+            }
         },
         lowerSrc: "./images/maps/CandyCapLower.png",
         upperSrc: "./images/maps/CandyCapUpper.png",
@@ -2424,7 +2513,7 @@ window.OverworldMaps = {
 
         },
         initialEvents: {
-            // required: ["NO_CHECK"],
+            required: ["NO_CHECK"],
             events: [
                 { type: "textMessage", from: "Kandi", text: "Oh Hamanita you're here" },
                 { type: "walk", who: "Kandi", direction: "right", time: 1000 },

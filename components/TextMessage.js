@@ -13,6 +13,8 @@ class TextMessage {
         if (this.isChat) this.element.classList.add("ChatMessage")
         else this.element.classList.add("TextMessage")
 
+        if (window.sizeState.size == "small") this.element.classList.add("sizeSmall")
+
         const headline = this.isChat ? `New chat from ${this.from}` : `${this.from}`;
 
         this.element.innerHTML =[`

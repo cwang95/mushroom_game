@@ -11,6 +11,10 @@
     color: var(--menu-font-color);
 }
 
+.TextMessage.sizeSmall {
+    height: 60px;
+}
+
 .ChatMessage {
     font-family: 'Orbitron', sans-serif;
     position: absolute;
@@ -27,6 +31,11 @@
     border-radius: 6px;
 }
 
+.ChatMessage.sizeSmall {
+    left: 0px;
+    width: 160px;
+}
+
 .ChatMessage h1 {
     font-size: 7px;
     font-weight: bold;
@@ -39,6 +48,10 @@
 
 .TextMessage_from {
     font-size: 6px;
+}
+
+.TextMessage_from.sizeSmall {
+    top: 2px;
 }
 
 .TextMessage_p {

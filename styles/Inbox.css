@@ -4,14 +4,23 @@
     left: 0px;
     right: 0px;
     top: 0px;
-    width: 240px;
-    height: 160px;
+    width: inherit;
+    height: inherit;
     padding: 0;
     background: #0c629cc4;
     color: white;
     display: none;
     font-size: 10px;
     image-rendering: pixelated;
+}
+
+.Inbox.sizeSmall {
+    width: 160px;
+    height: 160px;
+}
+
+.Inbox.sizeSmall h1 {
+    font-size: 8px;
 }
 
 .Inbox h1 {

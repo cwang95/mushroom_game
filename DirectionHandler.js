@@ -20,8 +20,13 @@ class DirectionHandler {
         return this.heldDirections[0];
     }
 
+    handleDir(dir) {
+
+    }
+
     init() {
         document.addEventListener("keydown", e=> {
+            console.log("Controlelr key donw")
             const dir = this.map[e.code];
             if (dir && this.heldDirections.indexOf(dir)===-1) {
                 this.heldDirections.unshift(dir);
@@ -29,6 +34,23 @@ class DirectionHandler {
         })
         document.addEventListener("keyup", e=> {
             const dir = this.map[e.code];
+            const idx = this.heldDirections.indexOf(dir);
+            if (idx> -1) {
+                this.heldDirections.splice(idx, 1);
+            }
+        })
+
+        document.addEventListener("ControllerMousedown", e=> {
+            console.log("Controlelr mouse donw")
+            const dir = this.map[e.detail.code];
+            if (dir && this.heldDirections.indexOf(dir)===-1) {
+                this.heldDirections.unshift(dir);
+            }
+        })
+
+        document.addEventListener("ControllerMouseup", e=> {
+            console.log("Controlelr mouse up")
+            const dir = this.map[e.detail.code];
             const idx = this.heldDirections.indexOf(dir);
             if (idx> -1) {
                 this.heldDirections.splice(idx, 1);

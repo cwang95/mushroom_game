@@ -56,9 +56,13 @@ class Pda {
 
     updateSize() {
         if (window.sizeState.size  === "small") {
-            this.pdaElement.classList.add("sizeSmall")
+            this.pdaElement.classList.add("sizeSmall");
+            this.overlayElement.element.classList.add("sizeSmall");
+            this.inbox.element.classList.add("sizeSmall");
         } else {
             this.pdaElement.classList.remove("sizeSmall")
+            this.overlayElement.element.classList.remove("sizeSmall");
+            this.inbox.element.classList.remove("sizeSmall");
         }
     }
 
@@ -75,7 +79,9 @@ class Pda {
         this.createElement();
         this.overlayElement = new Overlay();
         this.overlayElement.init(container);
-        this.overlayElement.setInnerElements([new Map(), new Inbox()])
+        this.map = new Map();
+        this.inbox = new Inbox();
+        this.overlayElement.setInnerElements([this.map, this.inbox])
         container.appendChild(this.pdaElement);
         document.addEventListener("TimePassed", e => {
             this.keyboardMenu.updateLabel("Clock", e.detail.time);

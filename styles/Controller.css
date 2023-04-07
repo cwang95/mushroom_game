@@ -1,0 +1,14 @@
+.controller-container {
+    display: none;
+    position: absolute;
+    left:0; right:0;
+    bottom: 16px;
+    padding: 24px;
+    text-align:center;
+    justify-content: center;
+}
+  
+.controller-container.sizeSmall {
+    display: flex;
+}
+
