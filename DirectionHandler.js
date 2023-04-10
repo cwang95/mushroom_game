@@ -41,7 +41,6 @@ class DirectionHandler {
         })
 
         document.addEventListener("ControllerMousedown", e=> {
-            console.log("Controlelr mouse donw")
             const dir = this.map[e.detail.code];
             if (dir && this.heldDirections.indexOf(dir)===-1) {
                 this.heldDirections.unshift(dir);
@@ -49,7 +48,6 @@ class DirectionHandler {
         })
 
         document.addEventListener("ControllerMouseup", e=> {
-            console.log("Controlelr mouse up")
             const dir = this.map[e.detail.code];
             const idx = this.heldDirections.indexOf(dir);
             if (idx> -1) {

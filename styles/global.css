@@ -58,6 +58,7 @@ body {
   font-family: "Hellovetica";
   color: #fff;
   image-rendering: pixelated;
+  display: none;
 }  
 
 .game-container {
