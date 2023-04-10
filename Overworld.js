@@ -63,6 +63,10 @@ class Overworld {
       // Check for person
       this.map.checkForActionCutscene();
     });
+
+    document.addEventListener("ControllerEngagement", e => {
+      this.map.checkForActionCutscene();
+    })
   }
 
   bindResizeHandler() {
