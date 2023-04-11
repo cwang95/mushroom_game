@@ -27,10 +27,10 @@ function getRelativeCoordinates (event, referenceElement) {
   }
 
 function getDirection(x, y) {
-    if (x <=40) {
-        return "ArrowLeft";
-    } else if (y >= 80 ) {
+    if ( y >= 70 ) { //
         return "ArrowDown";
+    } else if (x <=40) {
+        return "ArrowLeft";
     } else if (x >= 80) {
         return "ArrowRight";
     } else if (y <=40 ) {
