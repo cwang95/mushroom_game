@@ -37,6 +37,14 @@ class TextMessage {
         this.actionListener = new KeypressListener("Enter", ()=> {
             this.done();
         })
+
+        this.actionListener = new KeypressListener("Enter", ()=> {
+            this.done();
+        })
+
+        document.addEventListener("ControllerEngagement", e => {
+            this.done();
+        })
     }
 
     done() {
